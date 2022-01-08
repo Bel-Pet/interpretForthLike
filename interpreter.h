@@ -14,7 +14,7 @@ public:
     // Adds a command to the commands map
     bool registerCreator(const std::string& c, creator_t creator);
     // Translates a string into commands and fulfills them
-    void interpret(std::string & cmds);
+    void interpret(std::string::iterator& it, std::string::iterator& end);
     // Find and return command else return error
     Command* find_command(std::string::iterator& it, std::string::iterator& end, const std::string& str);
     // Find and return word from string
