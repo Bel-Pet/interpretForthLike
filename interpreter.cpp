@@ -1,29 +1,48 @@
-#ifndef INTERPRETFORTHLIKE_INTERPRETER_H
-#define INTERPRETFORTHLIKE_INTERPRETER_H
+#include "interpreter.h"
 
-#include <map>
-#include "command.h"
+bool Interpreter::registerCreator(const std::string& c, creator_t creator) {
+    creators_[c] = creator;
+    return true;
+}
 
-class Interpreter {
-public:
-    static Interpreter & getInstance() {
-        static Interpreter i;
-        return i;
+void Interpreter::interpret(std::string::iterator& it, std::string::iterator& end) {
+    while (it != end) {
+        if (*it == ' '){
+            it++;
+            continue;
+        }
+        try {
+            find_command(it, end, find_str(it, end))->apply(data_);
+        } catch (interpreter_error & e) {
+            std::cout << e.what() << std::endl;
+        }
     }
-    typedef Command * (*creator_t)(std::string::iterator & it, std::string::iterator & en);
-    // Adds a command to the commands map
-    bool registerCreator(const std::string& c, creator_t creator);
-    // Translates a string into commands and fulfills them
-    void interpret(std::string::iterator& it, std::string::iterator& end);
-    // Find and return command else return error
-    Command* find_command(std::string::iterator& it, std::string::iterator& end, const std::string& str);
-    // Find and return word from string
-    std::string find_str(std::string::iterator& it, std::string::iterator& end);
-private:
-    Interpreter() = default;
-    std::map<std::string, creator_t> creators_;
-    std::vector<int> data_;
-};
+}
 
-#endif
+Command* Interpreter::find_command(std::string::iterator& it, std::string::iterator& end, const std::string& str) {
+    auto creators_it = creators_.find(str);
+    if (creators_it == creators_.end()) {
+        std::stringstream ss;
+        ss << "no such command: '" << str << "'";
+        throw interpreter_error(ss.str());
+    }
+    return creators_it->second(it, end);
+}
 
+std::string Interpreter::find_str(std::string::iterator& it, std::string::iterator& end) {
+    std::string str;
+    while (it != end && *it != ' ') {
+        // Condition for finding the command to add a number to the stack
+        if (*it >= '0' && *it <= '9' && str.empty()) {
+            str = "0";
+            break;
+        }
+        // Condition for finding the command to print a line
+        if (str == ".\"" && *it == ' '){
+            break;
+        }
+        str += *it;
+        it++;
+    }
+    return str;
+}
