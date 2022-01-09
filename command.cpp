@@ -2,6 +2,7 @@
 #include "interpreter.h"
 
 namespace {
+
     Command * add_creator(std::string::iterator & it, std::string::iterator & end) {
         return new Add();
     }
@@ -99,20 +100,45 @@ namespace {
     bool cr_cmd = Interpreter::getInstance().registerCreator(".cr.", cr_creator);
 
     Command * print_string_creator(std::string::iterator & it, std::string::iterator & end) {
-        return new PrintString();
+        std::string str;
+        while (it != end) {
+            if (*it == '"')
+                break;
+            str += *it;
+            it++;
+        }
+        if (it == end) {
+            std::stringstream ss;
+            ss << "not at the end of the line closing parenthesis";
+            throw interpreter_error(ss.str());
+        }
+        it++;
+        return new PrintString(str);
     }
 
     bool print_string_cmd = Interpreter::getInstance().registerCreator(".\"", print_string_creator);
 
-    // В процессе добавления: обработка и запоминание числа из потока для последующего добавления его на стек без считывания строки в функции класса
     Command * add_number_creator(std::string::iterator & it, std::string::iterator & end) {
-        return new AddNumber();
+        int num = 0;
+        bool false_number = false;
+        while (it != end && *it != ' ') {
+            if (!(*it >= '0' && *it <= '9')) {
+                false_number = true;
+            }
+            num = num * 10 + (int) (*it - '0');
+            it++;
+        }
+        if (false_number) {
+            std::stringstream ss;
+            ss << "not number";
+            throw interpreter_error(ss.str());
+        }
+        return new AddNumber(num);
     }
 
     bool add_number_cmd = Interpreter::getInstance().registerCreator("0", add_number_creator);
 
-    // Нужно сократить колличество кода в функции if_creator
-    /*Command * if_creator(std::string::iterator & it, std::string::iterator & end) {
+   Command * if_creator(std::string::iterator & it, std::string::iterator & end) {
         std::vector<Command *> one_stack_command;
         std::vector<Command *> two_stack_command;
         bool exist_else = false;
@@ -147,43 +173,73 @@ namespace {
         return new If(one_stack_command, two_stack_command, exist_else);
     }
 
-    bool if_cmd = Interpreter::getInstance().registerCreator("if", if_creator);*/
+    bool if_cmd = Interpreter::getInstance().registerCreator("if", if_creator);
 
-
-    // Прблема в обработек добавления чисел на стэк
-    /*Command * cycle_creator(std::string::iterator & it, std::string::iterator & end) {
+    Command * cycle_creator(std::string::iterator & it, std::string::iterator & end) {
         std::vector<Command *> stack_command;
         bool i = false;
-        int num = 0;
+        bool exist_loop = false;
         while (it != end) {
             if (*it == ' '){
                 it++;
                 continue;
             }
             std::string str = Interpreter::getInstance().find_str(it, end);
-            if (str == "0")
-                num++;
-            if (str == "i") {
-                auto it_stack_command = stack_command.begin();
-                while (it_stack_command != stack_command.end()) {
-                    if (!stack_command.empty())
-                        if (stack_command.size() != 2 && num != 2) {
-                            std::stringstream ss;
-                            ss << "wrong sequence in a loop";
-                            throw interpreter_error(ss.str());
-                        }
-                    it_stack_command++;
-                }
-                if (num != 0)
-
-                i = true;
-                continue;
+            if (str == "loop;") {
+                exist_loop = true;
+                break;
             }
             Command* creator = Interpreter::getInstance().find_command(it, end, str);
             stack_command.push_back(creator);
         }
-        return new Cycle(stack_command);
+        if (!exist_loop) {
+            std::stringstream ss;
+            ss << "no then;";
+            throw interpreter_error(ss.str());
+        }
+        return new Cycle(stack_command, i);
     }
 
-    bool cycle_cmd = Interpreter::getInstance().registerCreator("do", cycle_creator);*/
+    bool cycle_cmd = Interpreter::getInstance().registerCreator("do", cycle_creator);
+
+    /*Command * new_command_creator(std::string::iterator & it, std::string::iterator & end) {
+        std::string str;
+        while (it != end && *it != ' ') {
+            str += *it;
+        }
+        return new NewCommand(NewCommand::command_map[str]);
+    }
+
+    Command * add_command_creator(std::string::iterator & it, std::string::iterator & end) {
+        std::string str;
+        it++;
+        while (it != end) {
+            if (*it == ' '){
+                it++;
+                break;
+            }
+            str += *it;
+        }
+        if (str.empty()) {
+            std::stringstream ss;
+            ss << "no name new function";
+            throw interpreter_error(ss.str());
+        }
+        std::vector<Command *> stack_command;
+        while (it != end) {
+            if (*it == ' '){
+                it++;
+                continue;
+            }
+            stack_command.push_back(Interpreter::getInstance().find_command(it, end, Interpreter::getInstance().find_str(it, end)));
+        }
+        if (stack_command.empty()) {
+            std::stringstream ss;
+            ss << "no commands in a function body";
+            throw interpreter_error(ss.str());
+        }
+        return new AddCommand();
+    }
+
+    bool add_command_cmd = Interpreter::getInstance().registerCreator(":", add_command_creator);*/
 }
