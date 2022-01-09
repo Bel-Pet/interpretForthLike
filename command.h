@@ -6,16 +6,17 @@
 #include <utility>
 #include <vector>
 #include <sstream>
+#include <map>
 #include "interpreter_error.h"
 
 class Command {
 public:
-    virtual void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) = 0;
+    virtual void apply(std::vector<int>& data) = 0;
 };
 
 class Add: public Command {
 public:
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
         if (data.size() < 2) {
             std::stringstream ss;
             ss << "not enough numbers";
@@ -30,7 +31,7 @@ public:
 };
 
 class Sub: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
         if (data.size() < 2) {
             std::stringstream ss;
             ss << "not enough numbers";
@@ -45,7 +46,7 @@ class Sub: public Command {
 };
 
 class Mod: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
         if (data.size() < 2) {
             std::stringstream ss;
             ss << "not enough numbers";
@@ -60,7 +61,7 @@ class Mod: public Command {
 };
 
 class Div: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
         if (data.size() < 2) {
             std::stringstream ss;
             ss << "not enough numbers";
@@ -75,7 +76,7 @@ class Div: public Command {
 };
 
 class Mul: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
         if (data.size() < 2) {
             std::stringstream ss;
             ss << "not enough numbers";
@@ -90,7 +91,7 @@ class Mul: public Command {
 };
 
 class More: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
         if (data.size() < 2) {
             std::stringstream ss;
             ss << 0;
@@ -103,7 +104,7 @@ class More: public Command {
 };
 
 class Less: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
         if (data.size() < 2) {
             std::stringstream ss;
             ss << 0;
@@ -116,7 +117,7 @@ class Less: public Command {
 };
 
 class Equals: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
         if (data.size() < 2) {
             std::stringstream ss;
             ss << 0;
@@ -129,7 +130,7 @@ class Equals: public Command {
 };
 
 class Dup: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
         if (data.empty()) {
             std::stringstream ss;
             ss << "not enough numbers";
@@ -140,7 +141,7 @@ class Dup: public Command {
 };
 
 class Drop: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
         if (data.empty()) {
             std::stringstream ss;
             ss << "not enough numbers";
@@ -151,7 +152,7 @@ class Drop: public Command {
 };
 
 class Point: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
         if (data.empty()) {
             std::stringstream ss;
             ss << "not enough numbers";
@@ -163,7 +164,7 @@ class Point: public Command {
 };
 
 class Emit: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
         if (data.empty()) {
             std::stringstream ss;
             ss << "not enough numbers";
@@ -175,7 +176,7 @@ class Emit: public Command {
 };
 
 class Swap: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
         if (data.size() < 2) {
             std::stringstream ss;
             ss << "not enough numbers";
@@ -186,7 +187,7 @@ class Swap: public Command {
 };
 
 class Rot: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
         if (data.size() < 3) {
             std::stringstream ss;
             ss << "not enough numbers";
@@ -198,7 +199,7 @@ class Rot: public Command {
 };
 
 class Over: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
         if (data.size() < 2) {
             std::stringstream ss;
             ss << "not enough numbers";
@@ -209,7 +210,7 @@ class Over: public Command {
 };
 
 class Cr: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
         if (data.size() < 2) {
             std::stringstream ss;
             ss << "not enough numbers";
@@ -223,95 +224,106 @@ class Cr: public Command {
 };
 
 class PrintString: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
-        std::string str;
-        while (it != end) {
-            if (*it == '"')
-                break;
-            str += *it;
-            it++;
-        }
-        if (it == end) {
-            std::stringstream ss;
-            ss << "not at the end of the line closing parenthesis";
-            throw interpreter_error(ss.str());
-        }
-        std::cout << str << std::endl;
-        it++;
+public:
+    explicit PrintString(std::string& str) : str_(str){}
+    void apply(std::vector<int>& data) override {
+        std::cout << str_ << std::endl;
     }
+
+private:
+    std::string str_;
 };
 
 class AddNumber: public Command {
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
-        int num = 0;
-        while (it != end && *it != ' ') {
-            if (!(*it >= '0' && *it <= '9')) {
-                std::stringstream ss;
-                ss << "not number";
-                throw interpreter_error(ss.str());
-            }
-            num = num * 10 + (int) (*it - '0');
-            it++;
-        }
-        data.push_back(num);
+public:
+    explicit AddNumber(int& num) : number_(num){}
+    void apply(std::vector<int>& data) override {
+        data.push_back(number_);
     }
+
+private:
+    int number_;
 };
 
-
-// Добавить private функцию для цикла
-/*class If: public Command {
+class If: public Command {
 public:
-    If(std::vector<Command *>& one_stack_command, std::vector<Command *>& two_stack_command, bool& exist_else): one_stack_command_(one_stack_command), two_stack_command_(two_stack_command), exist_else_(exist_else) {}
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    If(std::vector<Command *>& st1, std::vector<Command *>& st2, bool& exist_else): stack_command_(st1), else_stack_command_(st2), exist_else_(exist_else) {}
+    void apply(std::vector<int>& data) override {
         if (data.back() == 0) {
             if (exist_else_) {
-                auto it_stack_command = two_stack_command_.end() - 1;
-                while (it_stack_command != two_stack_command_.begin() - 1) {
-                    (*it_stack_command)->apply(it, end, data);
-                    it_stack_command--;
-                }
+                processing_command(else_stack_command_, data);
                 return;
             }
             return;
         }
-        auto it_stack_command = one_stack_command_.end() - 1;
-        while (it_stack_command != one_stack_command_.begin() - 1) {
-            (*it_stack_command)->apply(it, end, data);
-            it_stack_command--;
-        }
+        processing_command(stack_command_, data);
     }
 private:
-    std::vector<Command *> one_stack_command_;
-    std::vector<Command *> two_stack_command_;
+    static void processing_command(std::vector<Command *>& stack, std::vector<int>& data) {
+        auto it_stack_command = stack.begin();
+        while (it_stack_command != stack.end()) {
+            (*it_stack_command)->apply(data);
+            it_stack_command++;
+        }
+    }
+    std::vector<Command *> stack_command_;
+    std::vector<Command *> else_stack_command_;
     bool exist_else_;
-};*/
-
-
+};
 
 class Cycle: public Command {
 public:
     Cycle(std::vector<Command *>& stack_command, bool& i): stack_command_(stack_command), i_(i){}
-    void apply(std::string::iterator & it, std::string::iterator & end, std::vector<int>& data) override {
+    void apply(std::vector<int>& data) override {
+        if (data.size() < 2) {
+            std::stringstream ss;
+            ss << "not enough numbers";
+            throw interpreter_error(ss.str());
+        }
+        int a, b;
         if (i_) {
-            (*stack_command_.begin())->apply(it, end, data);
-            (*stack_command_.begin())->apply(it, end, data);
-            int a = data.back();
+            a = *(data.end() - 1);
+            b = *(data.end() - 2);
             data.pop_back();
-            int b = data.back();
             data.pop_back();
-            while (a > b) {
-                auto it_stack = stack_command_.end() - 1;
-                while (it_stack != stack_command_.begin() - 1) {
-                    (*it_stack)->apply(it, end, data);
-                    it_stack--;
-                }
-                a--;
+        } else {
+            a = *(data.end() - 2);
+            b = *(data.end() - 1);
+            data.pop_back();
+        }
+        while (a < b) {
+            auto it_stack_command = stack_command_.begin();
+            while (it_stack_command != stack_command_.end()) {
+                (*it_stack_command)->apply(data);
+                it_stack_command++;
             }
+            a++;
         }
     }
 private:
     std::vector<Command *> stack_command_;
     bool i_;
 };
+
+/*class NewCommand: public Command {
+public:
+    explicit NewCommand(std::vector<Command *>& stack) : stack_command_(stack){}
+    void apply(std::vector<int>& data) override {
+        auto it = stack_command_.begin();
+        while (it != stack_command_.end()) {
+            (*it)->apply(data);
+            it++;
+        }
+    }
+    static std::map<std::string, std::vector<Command *>> command_map;
+private:
+    std::vector<Command *> stack_command_;
+};
+
+class AddCommand: public Command {
+public:
+    void apply(std::vector<int>& data) override {
+    }
+};*/
 
 #endif
