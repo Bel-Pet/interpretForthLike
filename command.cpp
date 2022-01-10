@@ -100,6 +100,7 @@ namespace {
     bool cr_cmd = Interpreter::getInstance().registerCreator(".cr.", cr_creator);
 
     Command * print_string_creator(std::string::iterator & it, std::string::iterator & end) {
+        it++;
         std::string str;
         while (it != end) {
             if (*it == '"')
