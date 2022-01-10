@@ -11,19 +11,17 @@ public:
         static Interpreter i;
         return i;
     }
-    typedef Command * (*creator_t)(std::string::iterator & it, std::string::iterator & en);
     // Adds a command to the commands map
-    bool registerCreator(const std::string& c, creator_t creator);
+    bool registerCreator(const std::string& c, Command* creator_t);
     // Translates a string into commands and fulfills them
     std::string interpret(std::string::iterator& it, std::string::iterator& end);
     // Find and return command else return error
-    Command* find_command(std::string::iterator& it, std::string::iterator& end, const std::string& str);
-    // Find and return word from string
-    std::string find_str(std::string::iterator& it, std::string::iterator& end);
+    Command* find_command(std::string::iterator& it, std::string::iterator& end, const std::string& str, std::stringstream& result);
 private:
     Interpreter() = default;
-    std::map<std::string, creator_t> creators_;
+    std::map<std::string, Command*> creators_;
     std::vector<int> data_;
 };
 
 #endif
+
