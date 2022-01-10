@@ -1,48 +1,42 @@
 #include "interpreter.h"
 
-bool Interpreter::registerCreator(const std::string& c, creator_t creator) {
+bool Interpreter::registerCreator(const std::string& c, Command* creator) {
     creators_[c] = creator;
     return true;
 }
 
 std::string Interpreter::interpret(std::string::iterator& it, std::string::iterator& end) {
-    std::string result = "> ";
+    std::stringstream result;
+    result << ">";
+    std::string str;
     while (it != end) {
+        str.clear();
         if (*it == ' '){
             it++;
             continue;
         }
         try {
-            find_command(it, end, find_str(it, end))->apply(data_, result);
+            if (isdigit(*it)) {
+                str = *it;
+                creators_[str]->apply(data_, result, it, end);
+                continue;
+            }
+            it = std::find_if(it, end, [&str](char c){ if (c == ' ') { return true; } str += c; return false;});
+            find_command(it, end, str, result)->apply(data_, result, it, end);
         } catch (interpreter_error & e) {
-            result += e.what();
-            result += '\n';
-            return result;
+            result << '\n';
+            result << e.what();
         }
     }
-    return result;
+    return result.str();
 }
 
-Command* Interpreter::find_command(std::string::iterator& it, std::string::iterator& end, const std::string& str) {
+Command* Interpreter::find_command(std::string::iterator& it, std::string::iterator& end, const std::string& str, std::stringstream & result) {
     auto creators_it = creators_.find(str);
     if (creators_it == creators_.end()) {
         std::stringstream ss;
-        ss << "no such command: '" << str << "'";
+        ss << " no such command: '" << str << "'";
         throw interpreter_error(ss.str());
     }
-    return creators_it->second(it, end);
-}
-
-std::string Interpreter::find_str(std::string::iterator& it, std::string::iterator& end) {
-    std::string str;
-    while (it != end && *it != ' ') {
-        // Condition for finding the command to add a number to the stack
-        if (*it >= '0' && *it <= '9' && str.empty()) {
-            str = "0";
-            break;
-        }
-        str += *it;
-        it++;
-    }
-    return str;
+    return creators_it->second;
 }
