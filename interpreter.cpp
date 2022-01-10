@@ -5,18 +5,22 @@ bool Interpreter::registerCreator(const std::string& c, creator_t creator) {
     return true;
 }
 
-void Interpreter::interpret(std::string::iterator& it, std::string::iterator& end) {
+std::string Interpreter::interpret(std::string::iterator& it, std::string::iterator& end) {
+    std::string result = "> ";
     while (it != end) {
         if (*it == ' '){
             it++;
             continue;
         }
         try {
-            find_command(it, end, find_str(it, end))->apply(data_);
+            find_command(it, end, find_str(it, end))->apply(data_, result);
         } catch (interpreter_error & e) {
-            std::cout << e.what() << std::endl;
+            result += e.what();
+            result += '\n';
+            return result;
         }
     }
+    return result;
 }
 
 Command* Interpreter::find_command(std::string::iterator& it, std::string::iterator& end, const std::string& str) {
@@ -35,10 +39,6 @@ std::string Interpreter::find_str(std::string::iterator& it, std::string::iterat
         // Condition for finding the command to add a number to the stack
         if (*it >= '0' && *it <= '9' && str.empty()) {
             str = "0";
-            break;
-        }
-        // Condition for finding the command to print a line
-        if (str == ".\"" && *it == ' '){
             break;
         }
         str += *it;
