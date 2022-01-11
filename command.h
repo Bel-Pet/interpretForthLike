@@ -14,22 +14,29 @@
 #include <cwctype>
 #include "interpreter_error.h"
 
+struct Data {
+    std::string::iterator it;
+    std::string::iterator end;
+    std::vector<int> data;
+    std::string result;
+};
+
 class Command {
 public:
     virtual ~Command()= default;
-    virtual void apply(std::vector<int>& data, std::stringstream& result, std::string::iterator& it, std::string::iterator& end) = 0;
+    virtual void apply(Data& x) = 0;
 };
 
 class ArithCommand: public Command {
-    void apply(std::vector<int>& data, std::stringstream& result, std::string::iterator& it, std::string::iterator& end) override {
-        if (data.size() < 2)
+    void apply(Data& x) override {
+        if (x.data.size() < 2)
             throw interpreter_error("Error arithmetic operation: not enough numbers");
 
-        int a  = data.back();
-        data.pop_back();
-        int b = data.back();
-        data.pop_back();
-        data.push_back(op(a, b));
+        int a  = x.data.back();
+        x.data.pop_back();
+        int b = x.data.back();
+        x.data.pop_back();
+        x.data.push_back(op(a, b));
     }
 
     virtual int op(int& a, int& b) = 0;
@@ -70,19 +77,22 @@ class Mul: public ArithCommand {
 };
 
 class LogicCommand: public Command {
-    void apply(std::vector<int>& data, std::stringstream& result, std::string::iterator& it, std::string::iterator& end) override {
-        if (data.size() < 2)
+    void apply(Data& x) override {
+        if (x.data.size() < 2)
             throw interpreter_error("Error logic operation: not enough numbers");
 
-        int a  = data.back();
-        data.pop_back();
-        int b = data.back();
-        data.pop_back();
+        int a  = x.data.back();
+        x.data.pop_back();
+        int b = x.data.back();
+        x.data.pop_back();
+
+        std::stringstream ss;
         if (op(a, b)) {
-            result <<" "<< "1";
+            ss <<" "<< "1";
             return;
         }
-        result <<" " << "0";
+        ss <<" " << "0";
+        x.result += ss.str();
     }
 
     virtual bool op(int& a, int& b) = 0;
@@ -107,11 +117,11 @@ class Equals: public LogicCommand {
 };
 
 class OptionCommand: public Command {
-    void apply(std::vector<int>& data, std::stringstream& result, std::string::iterator& it, std::string::iterator& end) override {
-        if (data.empty())
+    void apply(Data& x) override {
+        if (x.data.empty())
             throw interpreter_error("Error optional operator: not enough numbers");
 
-        op(data);
+        op(x.data);
     }
 
     virtual void op(std::vector<int> &data) = 0;
@@ -131,99 +141,103 @@ class Drop: public OptionCommand {
 
 class Swap: public Command {
 public:
-    void apply(std::vector<int>& data, std::stringstream& result, std::string::iterator& it, std::string::iterator& end) override {
-        if (data.size() < 2)
+    void apply(Data& x) override {
+        if (x.data.size() < 2)
             throw interpreter_error("Error swap: not enough numbers");
 
-        std::swap(*(data.end() -1), *(data.end() -2));
+        std::swap(*(x.data.end() -1), *(x.data.end() -2));
     }
 };
 
 class Rot: public Command {
 public:
-    void apply(std::vector<int>& data, std::stringstream& result, std::string::iterator& it, std::string::iterator& end) override {
-        if (data.size() < 3)
+    void apply(Data& x) override {
+        if (x.data.size() < 3)
             throw interpreter_error("Error rot: not enough numbers");
 
-        std::swap(*(data.end() -1), *(data.end() -3));
-        std::swap(*(data.end() -1), *(data.end() -2));
+        std::swap(*(x.data.end() -1), *(x.data.end() -3));
+        std::swap(*(x.data.end() -1), *(x.data.end() -2));
     }
 };
 
 class Over: public Command {
 public:
-    void apply(std::vector<int>& data, std::stringstream& result, std::string::iterator& it, std::string::iterator& end) override {
-        if (data.size() < 2)
+    void apply(Data& x) override {
+        if (x.data.size() < 2)
             throw interpreter_error("Error over: not enough numbers");
 
-        data.push_back(*(data.end() - 2));
+        x.data.push_back(*(x.data.end() - 2));
     }
 };
 
 class Cr: public Command {
 public:
-    void apply(std::vector<int>& data, std::stringstream& result, std::string::iterator& it, std::string::iterator& end) override {
-        result << '\n';
+    void apply(Data& x) override {
+        x.result += '\n';
     }
 };
 
 class Point: public Command {
 public:
-    void apply(std::vector<int>& data, std::stringstream& result, std::string::iterator& it, std::string::iterator& end) override {
-        if (data.empty())
+    void apply(Data& x) override {
+        if (x.data.empty())
             throw interpreter_error("Error point: not enough numbers");
 
-        result << " " << data.back();
-        data.pop_back();
+        std::stringstream ss;
+        ss << " " << x.data.back();
+        x.result += ss.str();
+        x.data.pop_back();
     }
 };
 
 class Emit: public Command {
 public:
-    void apply(std::vector<int>& data, std::stringstream& result, std::string::iterator& it, std::string::iterator& end) override {
-        if (data.empty())
+    void apply(Data& x) override {
+        if (x.data.empty())
             throw interpreter_error("Error emit: not enough numbers");
 
-        if (data.back() < 0 || data.back() > 255)
+        if (x.data.back() < 0 || x.data.back() > 255)
             throw interpreter_error("Error emit: going out of bounds");
 
-        result << " " << (char)data.back();
-        data.pop_back();
+        std::stringstream ss;
+        ss << " " << (char)x.data.back();
+        x.result += ss.str();
+        x.data.pop_back();
     }
 };
 
 class PrintString: public Command {
 public:
-    void apply(std::vector<int>& data, std::stringstream& result, std::string::iterator& it, std::string::iterator& end) override {
+    void apply(Data& x) override {
         std::string str;
-        for (; it < end && *it != '"'; it++) {
-            str += *it;
+        for (; x.it < x.end && *x.it != '"'; x.it++) {
+            str += *x.it;
         }
 
-        if (it == end)
+        if (x.it == x.end)
             throw interpreter_error("Error .\": no \"");
 
-        it++;
-        result << str;
+        x.it++;
+        x.result += str;
     }
 };
 
 class AddNumber: public Command {
 public:
-    void apply(std::vector<int>& data, std::stringstream& result, std::string::iterator& it, std::string::iterator& end) override {
+    void apply(Data& x) override {
         std::string str;
         int a = 1;
-        if (*it == '-') {
+        if (*x.it == '-') {
             a = -1;
-            it++;
+            x.it++;
         }
-        for (; it < end && !std::isspace(*it); it++) {
-            str += *it;
-            if (!isdigit(*it))
+        for (; x.it < x.end && !std::isspace(*x.it); x.it++) {
+            str += *x.it;
+            if (!isdigit(*x.it))
                 throw interpreter_error("Not number: " + str);
         }
 
-        data.push_back(std::stoi(str) * a);
+        x.data.push_back(std::stoi(str) * a);
     }
 };
 
