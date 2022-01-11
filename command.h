@@ -89,6 +89,7 @@ class LogicCommand: public Command {
         std::stringstream ss;
         if (op(a, b)) {
             ss <<" "<< "1";
+            x.result += ss.str();
             return;
         }
         ss <<" " << "0";
