@@ -3,59 +3,41 @@
 
 namespace {
 
-    bool add_cmd = Interpreter::getInstance().registerCreator("+", new Add());
+    bool add_cmd = Interpreter::getInstance().registerCreator("+", (std::shared_ptr<Command>)new Add());
 
-    bool sub_cmd = Interpreter::getInstance().registerCreator("-", new Sub());
+    bool sub_cmd = Interpreter::getInstance().registerCreator("-", (std::shared_ptr<Command>) new Sub());
 
-    bool mod_cmd = Interpreter::getInstance().registerCreator("%", new Mod());
+    bool mod_cmd = Interpreter::getInstance().registerCreator("%", (std::shared_ptr<Command>)new Mod());
 
-    bool div_cmd = Interpreter::getInstance().registerCreator("/", new Div());
+    bool div_cmd = Interpreter::getInstance().registerCreator("/", (std::shared_ptr<Command>)new Div());
 
-    bool mul_cmd = Interpreter::getInstance().registerCreator("*", new Mul());
+    bool mul_cmd = Interpreter::getInstance().registerCreator("*", (std::shared_ptr<Command>)new Mul());
 
-    bool more_cmd = Interpreter::getInstance().registerCreator(">", new More());
+    bool more_cmd = Interpreter::getInstance().registerCreator(">", (std::shared_ptr<Command>)new More());
 
-    bool less_cmd = Interpreter::getInstance().registerCreator("<", new Less());
+    bool less_cmd = Interpreter::getInstance().registerCreator("<", (std::shared_ptr<Command>)new Less());
 
-    bool equals_cmd = Interpreter::getInstance().registerCreator("=", new Equals());
+    bool equals_cmd = Interpreter::getInstance().registerCreator("=", (std::shared_ptr<Command>)new Equals());
 
-    bool dup_cmd = Interpreter::getInstance().registerCreator("dup", new Dup());
+    bool dup_cmd = Interpreter::getInstance().registerCreator("dup", (std::shared_ptr<Command>)new Dup());
 
-    bool drop_cmd = Interpreter::getInstance().registerCreator("drop", new Drop());
+    bool drop_cmd = Interpreter::getInstance().registerCreator("drop", (std::shared_ptr<Command>)new Drop());
 
-    bool point_cmd = Interpreter::getInstance().registerCreator(".", new Point());
+    bool point_cmd = Interpreter::getInstance().registerCreator(".", (std::shared_ptr<Command>)new Point());
 
-    bool swap_cmd = Interpreter::getInstance().registerCreator("swap", new Swap());
+    bool swap_cmd = Interpreter::getInstance().registerCreator("swap", (std::shared_ptr<Command>)new Swap());
 
-    bool rot_cmd = Interpreter::getInstance().registerCreator("rot", new Rot());
+    bool rot_cmd = Interpreter::getInstance().registerCreator("rot", (std::shared_ptr<Command>)new Rot());
 
-    bool over_cmd = Interpreter::getInstance().registerCreator("over", new Over());
+    bool over_cmd = Interpreter::getInstance().registerCreator("over", (std::shared_ptr<Command>)new Over());
 
-    bool emit_cmd = Interpreter::getInstance().registerCreator("emit", new Emit());
+    bool emit_cmd = Interpreter::getInstance().registerCreator("emit", (std::shared_ptr<Command>)new Emit());
 
-    bool cr_cmd = Interpreter::getInstance().registerCreator(".cr.", new Cr());
+    bool cr_cmd = Interpreter::getInstance().registerCreator("cr", (std::shared_ptr<Command>)new Cr());
 
-    bool zero_cmd = Interpreter::getInstance().registerCreator("0", new AddNumber());
+    bool zero_cmd = Interpreter::getInstance().registerCreator("0", (std::shared_ptr<Command>)new AddNumber());
 
-    bool one_cmd = Interpreter::getInstance().registerCreator("1", new AddNumber());
-
-    bool two_cmd = Interpreter::getInstance().registerCreator("2", new AddNumber());
-
-    bool three_cmd = Interpreter::getInstance().registerCreator("3", new AddNumber());
-
-    bool four_cmd = Interpreter::getInstance().registerCreator("4", new AddNumber());
-
-    bool five_cmd = Interpreter::getInstance().registerCreator("5", new AddNumber());
-
-    bool six_cmd = Interpreter::getInstance().registerCreator("6", new AddNumber());
-
-    bool seven_cmd = Interpreter::getInstance().registerCreator("7", new AddNumber());
-
-    bool eight_cmd = Interpreter::getInstance().registerCreator("8", new AddNumber());
-
-    bool nine_cmd = Interpreter::getInstance().registerCreator("9", new AddNumber());
-
-    bool print_string_cmd = Interpreter::getInstance().registerCreator(".\"", new PrintString());
+    bool print_string_cmd = Interpreter::getInstance().registerCreator(".\"", (std::shared_ptr<Command>)new PrintString());
 
    /*Command * if_creator(std::string::iterator & it, std::string::iterator & end) {
         std::vector<Command *> one_stack_command;
