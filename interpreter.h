@@ -21,7 +21,7 @@ private:
     std::shared_ptr<Command> find_command( const std::string& str);
     Interpreter() = default;
     std::map<std::string, std::shared_ptr<Command>> creators_;
-    std::vector<int> data_;
+    Data data_;
 };
 
 #endif
