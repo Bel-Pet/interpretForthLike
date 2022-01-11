@@ -23,6 +23,7 @@ public:
         if (data.size() < 2)
             throw interpreter_error(" not enough numbers");
 
+        // CR: wrapper int_stack for vector
         int a  = data.back();
         data.pop_back();
         int b = data.back();
@@ -44,11 +45,36 @@ class Sub: public Command {
     }
 };
 
+#include <functional>
+
+//class ArithCommand: public Command {
+//    void apply(std::vector<int> &data, std::stringstream &result, std::string::iterator &it, std::string::iterator &end) override {
+//        if (data.size() < 2)
+//            throw interpreter_error(" not enough numbers");
+//
+//        int a  = data.back();
+//        data.pop_back();
+//        int b = data.back();
+//        data.pop_back();
+//        data.push_back(op()(a, b));
+//    }
+//
+//    virtual std::function<int(int, int)> op() = 0;
+//};
+//
+//class Sub1: public ArithCommand {
+//    std::function<int(int, int)> op() override {
+//        return std::minus();
+//    }
+//};
+
+
 class Mod: public Command {
     void apply(std::vector<int>& data, std::stringstream & result, std::string::iterator& it, std::string::iterator& end) override {
         if (data.size() < 2)
             throw interpreter_error(" not enough numbers");
 
+        // CR: check if second is null
         int a  = data.back();
         data.pop_back();
         int b = data.back();
@@ -62,6 +88,7 @@ class Div: public Command {
         if (data.size() < 2)
             throw interpreter_error(" not enough numbers");
 
+        // CR: check if second is null
         int a  = data.back();
         data.pop_back();
         int b = data.back();
@@ -83,8 +110,10 @@ class Mul: public Command {
     }
 };
 
+// CR: Greater
 class More: public Command {
     void apply(std::vector<int>& data, std::stringstream & result, std::string::iterator& it, std::string::iterator& end) override {
+        // CR: throw exception instead
         if (data.size() < 2 || *(data.end() - 1) < *(data.end() - 2)) {
             result << " 0";
             return;
@@ -95,6 +124,7 @@ class More: public Command {
 
 class Less: public Command {
     void apply(std::vector<int>& data, std::stringstream & result, std::string::iterator& it, std::string::iterator& end) override {
+        // CR: same as More
         if (data.size() < 2 || *(data.end() - 1) > *(data.end() - 2)) {
             result << " 0";
             return;
@@ -105,6 +135,7 @@ class Less: public Command {
 
 class Equals: public Command {
     void apply(std::vector<int>& data, std::stringstream & result, std::string::iterator& it, std::string::iterator& end) override {
+        // CR: same
         if (data.size() < 2 || *(data.end() - 1) != *(data.end() - 2)) {
             result << " 0";
             return;
@@ -124,6 +155,7 @@ class Dup: public Command {
 
 class Drop: public Command {
     void apply(std::vector<int>& data, std::stringstream & result, std::string::iterator& it, std::string::iterator& end) override {
+        // CR: specify failed command
         if (data.empty())
             throw interpreter_error(" not enough numbers");
 
@@ -146,6 +178,7 @@ class Emit: public Command {
         if (data.empty())
             throw interpreter_error(" not enough numbers");
 
+        // CR: check that number in ASCII range and throw if not
         result << " " << (char)data.back();
         data.pop_back();
     }
@@ -184,6 +217,7 @@ class Cr: public Command {
         if (data.size() < 2)
             throw interpreter_error(" not enough numbers");
 
+        // CR: different logic
         result << " " << data.back() << '\n';
         data.pop_back();
         result << " " << data.back();
@@ -195,6 +229,7 @@ class AddNumber: public Command {
     void apply(std::vector<int>& data, std::stringstream & result, std::string::iterator& it, std::string::iterator& end) override {
         std::string str;
         bool error = false;
+        // CR: find_if / find_if_not?
         while (it != end && *it != ' ') {
             if (!isdigit(*it))
                 error = true;
@@ -212,6 +247,8 @@ class PrintString: public Command {
     void apply(std::vector<int>& data, std::stringstream & result, std::string::iterator& it, std::string::iterator& end) override {
         it++;
         std::string str;
+        // CR: find_if
+        // CR: (optional) escape quotes ." \"foo" -> "foo; ." \\\\"" -> error
         while (it != end) {
             if (*it == '"')
                 break;
@@ -219,7 +256,7 @@ class PrintString: public Command {
             it++;
         }
         if (it == end)
-            throw interpreter_error(" not at the end of the line closing parenthesis");
+            throw interpreter_error(" no closing quote for string");
 
         it++;
         result << " " << str;

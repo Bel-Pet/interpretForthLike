@@ -11,21 +11,27 @@ std::string Interpreter::interpret(std::string::iterator& it, std::string::itera
     std::string str;
     while (it != end) {
         str.clear();
+        // CR: https://en.cppreference.com/w/cpp/string/wide/iswspace
         if (*it == ' '){
             it++;
             continue;
         }
         try {
+            // CR: negative values
             if (isdigit(*it)) {
                 str = *it;
                 creators_[str]->apply(data_, result, it, end);
                 continue;
             }
+            // CR: ::iswspace
+            // CR: str += c as separate operation
             it = std::find_if(it, end, [&str](char c){ if (c == ' ') { return true; } str += c; return false;});
+            // CR: use struct Context { data_, result, it, end }
             find_command(it, end, str, result)->apply(data_, result, it, end);
         } catch (interpreter_error & e) {
             result << '\n';
             result << e.what();
+            // CR: stop execution on exception
         }
     }
     return result.str();

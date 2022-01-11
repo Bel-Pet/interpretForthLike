@@ -11,7 +11,7 @@ TEST(interpret, CorrectWorkAddNumber) {
     std::string result = interpreter.interpret(it, end);
 
     std::string expected = ">\n no such command: 'd4'\n not number 4\n not enough numbers";
-std::cout<<result<<std::endl;
+    std::cout<<result<<std::endl;
     bool check = result == expected;
     EXPECT_TRUE(check);
 }
