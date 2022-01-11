@@ -14,7 +14,6 @@ int main(int argc, char const *argv[]) {
     std::string cmds;
     Interpreter interpreter = Interpreter::getInstance();
     while (std::getline(file, cmds, '\n')) {
-        std::cout << "> ";
         auto begin = cmds.begin();
         auto end = cmds.end();
         interpreter.interpret(begin, end);
