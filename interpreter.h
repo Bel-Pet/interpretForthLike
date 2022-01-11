@@ -2,8 +2,9 @@
 #define INTERPRETFORTHLIKE_INTERPRETER_H
 
 #include <map>
-#include "command.h"
 #include <fstream>
+#include <memory>
+#include "command.h"
 
 class Interpreter {
 public:
@@ -12,14 +13,14 @@ public:
         return i;
     }
     // Adds a command to the commands map
-    bool registerCreator(const std::string& c, Command* creator_t);
+    bool registerCreator(const std::string& c, std::shared_ptr<Command> creator_t);
     // Translates a string into commands and fulfills them
     std::string interpret(std::string::iterator& it, std::string::iterator& end);
 private:
     // Find and return command else return error
-    Command* find_command(std::string::iterator& it, std::string::iterator& end, const std::string& str, std::stringstream& result);
+    std::shared_ptr<Command> find_command( const std::string& str);
     Interpreter() = default;
-    std::map<std::string, Command*> creators_;
+    std::map<std::string, std::shared_ptr<Command>> creators_;
     std::vector<int> data_;
 };
 
