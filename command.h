@@ -15,6 +15,11 @@
 #include "interpreter_error.h"
 
 struct Data {
+    int pop_back(){
+        int a = data.back();
+        data.pop_back();
+        return a;
+    }
     std::string::iterator it;
     std::string::iterator end;
     std::vector<int> data;
@@ -32,10 +37,8 @@ class ArithCommand: public Command {
         if (x.data.size() < 2)
             throw interpreter_error("Error arithmetic operation: not enough numbers");
 
-        int a  = x.data.back();
-        x.data.pop_back();
-        int b = x.data.back();
-        x.data.pop_back();
+        int a  = x.pop_back();
+        int b = x.pop_back();
         x.data.push_back(op(a, b));
     }
 
@@ -81,10 +84,8 @@ class LogicCommand: public Command {
         if (x.data.size() < 2)
             throw interpreter_error("Error logic operation: not enough numbers");
 
-        int a  = x.data.back();
-        x.data.pop_back();
-        int b = x.data.back();
-        x.data.pop_back();
+        int a  = x.pop_back();
+        int b = x.pop_back();
 
         std::stringstream ss;
         if (op(a, b)) {
