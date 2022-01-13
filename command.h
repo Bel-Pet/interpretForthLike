@@ -13,13 +13,15 @@
 #include <functional>
 #include <cwctype>
 #include "interpreter_error.h"
-
+// CR: Data -> Context
 struct Data {
+    // CR: move to vector wrapper
     int pop_back(){
         int a = data.back();
         data.pop_back();
         return a;
     }
+    // CR: use refs
     std::string::iterator it;
     std::string::iterator end;
     std::vector<int> data;
@@ -59,6 +61,7 @@ class Sub: public ArithCommand {
 
 class Mod: public ArithCommand {
     int op(int& a, int& b) override {
+        // CR: move to Mod#apply
         if (a == 0)
             throw interpreter_error("Error mod: first number is null");
         return a % b;
@@ -66,6 +69,7 @@ class Mod: public ArithCommand {
 };
 
 class Div: public ArithCommand {
+    // CR: same
     int op(int& a, int& b) override {
         if (a == 0)
             throw interpreter_error("Error mod: first number is null");
@@ -100,24 +104,28 @@ class LogicCommand: public Command {
     virtual bool op(int& a, int& b) = 0;
 };
 
+// CR: make arith command
 class More: public LogicCommand {
     bool op(int& a, int& b) override {
         return a > b;
     }
 };
 
+// CR: make arith command
 class Less: public LogicCommand {
     bool op(int& a, int& b) override {
         return a < b;
     }
 };
 
+// CR: make arith command
 class Equals: public LogicCommand {
     bool op(int& a, int& b) override {
         return a == b;
     }
 };
 
+// CR: remove
 class OptionCommand: public Command {
     void apply(Data& x) override {
         if (x.data.empty())
@@ -185,9 +193,8 @@ public:
         if (x.data.empty())
             throw interpreter_error("Error point: not enough numbers");
 
-        std::stringstream ss;
-        ss << " " << x.data.back();
-        x.result += ss.str();
+        x.result += " ";
+        x.result += std::to_string(x.data.back());
         x.data.pop_back();
     }
 };
@@ -199,8 +206,9 @@ public:
             throw interpreter_error("Error emit: not enough numbers");
 
         if (x.data.back() < 0 || x.data.back() > 255)
-            throw interpreter_error("Error emit: going out of bounds");
+            throw interpreter_error("Error emit: going out of bounds of ASCII");
 
+        // CR: same
         std::stringstream ss;
         ss << " " << (char)x.data.back();
         x.result += ss.str();
@@ -233,12 +241,14 @@ public:
             a = -1;
             x.it++;
         }
+        // CR: std::find_if_not(.., .., ::isdigit)
         for (; x.it < x.end && !std::isspace(*x.it); x.it++) {
             str += *x.it;
             if (!isdigit(*x.it))
                 throw interpreter_error("Not number: " + str);
         }
 
+        // CR: catch exception
         x.data.push_back(std::stoi(str) * a);
     }
 };

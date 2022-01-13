@@ -3,6 +3,7 @@
 #include <fstream>
 #include "interpreter.h"
 
+// CR: read from cin
 int main(int argc, char const *argv[]) {
     std::ifstream file("C:\\Users\\bel_p\\CLionProjects\\interpretForthLike\\file.txt");
 

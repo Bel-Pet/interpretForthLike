@@ -1,6 +1,7 @@
 #include "interpreter.h"
 #include <utility>
 
+// CR: unique_ptr
 bool Interpreter::registerCreator(const std::string& c, std::shared_ptr<Command> creator) {
     creators_[c] = std::move(creator);
     return true;
@@ -9,7 +10,8 @@ bool Interpreter::registerCreator(const std::string& c, std::shared_ptr<Command>
 std::string Interpreter::interpret(std::string::iterator& it, std::string::iterator& end) {
     data_.it = it;
     data_.end = end;
-    data_.result += '>';
+    // CR: move this append to main
+    data_.result = '>';
     while (data_.it != data_.end) {
         if (*data_.it == ' '){
             data_.it++;
@@ -17,6 +19,7 @@ std::string Interpreter::interpret(std::string::iterator& it, std::string::itera
         }
         try {
             if (isdigit(*data_.it) || (*data_.it == '-' && isdigit(*(data_.it + 1)))) {
+                // CR: add method for number parsing
                 creators_["0"]->apply(data_);
                 continue;
             }

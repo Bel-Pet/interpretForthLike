@@ -11,7 +11,6 @@ TEST(interpret, CorrectWorkAddNumber) {
     std::string result = interpreter.interpret(it, end);
 
     std::string expected = "> 4 -2 5";
-    std::cout<<result<<std::endl;
     bool check = result == expected;
     EXPECT_TRUE(check);
 }
@@ -30,7 +29,7 @@ TEST(interpret, NotCommand) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkAddNumber) {
+TEST(interpret, IncorrectWorkAddNumber) {
     std::string str = "5f 4 . .";
     auto it = str.begin();
     auto end = str.end();
@@ -44,7 +43,7 @@ TEST(interpret, AncorrectWorkAddNumber) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkPoint) {
+TEST(interpret, IncorrectWorkPoint) {
     std::string str = ". .";
     auto it = str.begin();
     auto end = str.end();
@@ -72,7 +71,7 @@ TEST(interpret, CorrectWorkAdd) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkAddOneNumber) {
+TEST(interpret, IncorrectWorkAddOneNumber) {
     std::string str = "3 + .";
     auto it = str.begin();
     auto end = str.end();
@@ -86,7 +85,7 @@ TEST(interpret, AncorrectWorkAddOneNumber) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkAddZeroNumber) {
+TEST(interpret, IncorrectWorkAddZeroNumber) {
     std::string str = "+ .";
     auto it = str.begin();
     auto end = str.end();
@@ -114,7 +113,7 @@ TEST(interpret, CorrectWorkSub) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkSubOneNumber) {
+TEST(interpret, IncorrectWorkSubOneNumber) {
     std::string str = "3 - .";
     auto it = str.begin();
     auto end = str.end();
@@ -128,7 +127,7 @@ TEST(interpret, AncorrectWorkSubOneNumber) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkSubZeroNumber) {
+TEST(interpret, IncorrectWorkSubZeroNumber) {
     std::string str = "- .";
     auto it = str.begin();
     auto end = str.end();
@@ -156,7 +155,7 @@ TEST(interpret, CorrectWorkMod) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkModOneNumber) {
+TEST(interpret, IncorrectWorkModOneNumber) {
     std::string str = "3 % .";
     auto it = str.begin();
     auto end = str.end();
@@ -170,7 +169,7 @@ TEST(interpret, AncorrectWorkModOneNumber) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkModZeroNumber) {
+TEST(interpret, IncorrectWorkModZeroNumber) {
     std::string str = "% .";
     auto it = str.begin();
     auto end = str.end();
@@ -184,7 +183,7 @@ TEST(interpret, AncorrectWorkModZeroNumber) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkModOneNumberZero) {
+TEST(interpret, IncorrectWorkModOneNumberZero) {
     std::string str = "3 0 % .";
     auto it = str.begin();
     auto end = str.end();
@@ -212,7 +211,7 @@ TEST(interpret, CorrectWorkDiv) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkDivOneNumber) {
+TEST(interpret, IncorrectWorkDivOneNumber) {
     std::string str = "3 / .";
     auto it = str.begin();
     auto end = str.end();
@@ -226,7 +225,7 @@ TEST(interpret, AncorrectWorkDivOneNumber) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkDivZeroNumber) {
+TEST(interpret, IncorrectWorkDivZeroNumber) {
     std::string str = "/ .";
     auto it = str.begin();
     auto end = str.end();
@@ -240,7 +239,7 @@ TEST(interpret, AncorrectWorkDivZeroNumber) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkDivOneNumberZero) {
+TEST(interpret, IncorrectWorkDivOneNumberZero) {
     std::string str = "3 0 / .";
     auto it = str.begin();
     auto end = str.end();
@@ -268,7 +267,7 @@ TEST(interpret, CorrectWorkMul) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkMulOneNumber) {
+TEST(interpret, IncorrectWorkMulOneNumber) {
     std::string str = "3 * .";
     auto it = str.begin();
     auto end = str.end();
@@ -282,7 +281,7 @@ TEST(interpret, AncorrectWorkMulOneNumber) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkMulZeroNumber) {
+TEST(interpret, IncorrectWorkMulZeroNumber) {
     std::string str = "* .";
     auto it = str.begin();
     auto end = str.end();
@@ -310,7 +309,7 @@ TEST(interpret, CorrectWorkMore) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkMoreOneNumber) {
+TEST(interpret, IncorrectWorkMoreOneNumber) {
     std::string str = ">";
     auto it = str.begin();
     auto end = str.end();
@@ -324,7 +323,7 @@ TEST(interpret, AncorrectWorkMoreOneNumber) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkMoreZeroNumber) {
+TEST(interpret, IncorrectWorkMoreZeroNumber) {
     std::string str = "1 >";
     auto it = str.begin();
     auto end = str.end();
@@ -352,7 +351,7 @@ TEST(interpret, CorrectWorkLess) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkLessOneNumber) {
+TEST(interpret, IncorrectWorkLessOneNumber) {
     std::string str = "<";
     auto it = str.begin();
     auto end = str.end();
@@ -366,7 +365,7 @@ TEST(interpret, AncorrectWorkLessOneNumber) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkLessZeroNumber) {
+TEST(interpret, IncorrectWorkLessZeroNumber) {
     std::string str = "1 <";
     auto it = str.begin();
     auto end = str.end();
@@ -394,7 +393,7 @@ TEST(interpret, CorrectWorkEquals) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkEqualsOneNumber) {
+TEST(interpret, IncorrectWorkEqualsOneNumber) {
     std::string str = "=";
     auto it = str.begin();
     auto end = str.end();
@@ -408,7 +407,7 @@ TEST(interpret, AncorrectWorkEqualsOneNumber) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkEqualsZeroNumber) {
+TEST(interpret, IncorrectWorkEqualsZeroNumber) {
     std::string str = "1 =";
     auto it = str.begin();
     auto end = str.end();
@@ -436,7 +435,7 @@ TEST(interpret, CorrectWorkDup) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkDup) {
+TEST(interpret, IncorrectWorkDup) {
     std::string str = "dup 2 dup . .";
     auto it = str.begin();
     auto end = str.end();
@@ -464,7 +463,7 @@ TEST(interpret, CorrectWorkDrop) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkDrop) {
+TEST(interpret, IncorrectWorkDrop) {
     std::string str = "drop . .";
     auto it = str.begin();
     auto end = str.end();
@@ -492,7 +491,7 @@ TEST(interpret, CorrectWorkEmit) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkEmitNoNumber) {
+TEST(interpret, IncorrectWorkEmitNoNumber) {
     std::string str = "emit";
     auto it = str.begin();
     auto end = str.end();
@@ -506,16 +505,18 @@ TEST(interpret, AncorrectWorkEmitNoNumber) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkEmitNotAscii) {
+TEST(interpret, IncorrectWorkEmitNotAscii) {
     std::string str = "-2 emit";
+    // CR: move to separate method
     auto it = str.begin();
     auto end = str.end();
 
     Interpreter interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(it, end);
 
-    std::string expected = ">\nError emit: going out of bounds";
+    std::string expected = ">\nError emit: going out of bounds of ASCII";
 
+    // CR: EXPECT_EQ
     bool check = result == expected;
     EXPECT_TRUE(check);
 }
@@ -534,7 +535,7 @@ TEST(interpret, CorrectWorkSwap) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkSwapNoNumber) {
+TEST(interpret, IncorrectWorkSwapNoNumber) {
     std::string str = "3 swap . .";
     auto it = str.begin();
     auto end = str.end();
@@ -562,7 +563,7 @@ TEST(interpret, CorrectWorkRot) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkRotNoNumber) {
+TEST(interpret, IncorrectWorkRotNoNumber) {
     std::string str = "3 4 rot . . .";
     auto it = str.begin();
     auto end = str.end();
@@ -590,7 +591,7 @@ TEST(interpret, CorrectWorkOver) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkOverNoNumbers) {
+TEST(interpret, IncorrectWorkOverNoNumbers) {
     std::string str = "over . . .";
     auto it = str.begin();
     auto end = str.end();
@@ -604,7 +605,7 @@ TEST(interpret, AncorrectWorkOverNoNumbers) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkOverOneNumber) {
+TEST(interpret, IncorrectWorkOverOneNumber) {
     std::string str = "1 over . . .";
     auto it = str.begin();
     auto end = str.end();
@@ -646,7 +647,7 @@ TEST(interpret, CorrectWorkPrintString) {
     EXPECT_TRUE(check);
 }
 
-TEST(interpret, AncorrectWorkPrintString) {
+TEST(interpret, IncorrectWorkPrintString) {
     std::string str = ".\" wef awd";
     auto it = str.begin();
     auto end = str.end();
