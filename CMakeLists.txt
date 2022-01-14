@@ -4,6 +4,8 @@ project(interpretForthLike)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+add_executable(main interpreter.h interpreter.cpp command.h command.cpp interpreter_error.h main.cpp)
+
 include(FetchContent)
 FetchContent_Declare(
         googletest
@@ -14,7 +16,6 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(interpretForthLike interpreter.h interpreter.cpp command.h command.cpp interpreter_error.h test.cpp)
-
 
 target_link_libraries(
         interpretForthLike

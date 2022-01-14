@@ -3,7 +3,6 @@
 #include <fstream>
 #include "interpreter.h"
 
-// CR: read from cin
 int main(int argc, char const *argv[]) {
     std::ifstream file("C:\\Users\\bel_p\\CLionProjects\\interpretForthLike\\file.txt");
 
@@ -15,9 +14,7 @@ int main(int argc, char const *argv[]) {
     std::string cmds;
     Interpreter interpreter = Interpreter::getInstance();
     while (std::getline(file, cmds, '\n')) {
-        auto begin = cmds.begin();
-        auto end = cmds.end();
-        interpreter.interpret(begin, end);
+        std::cout << interpreter.interpret(cmds)<< std::endl;
     }
     file.close();
     return 0;

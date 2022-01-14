@@ -1,47 +1,71 @@
 #include "interpreter.h"
-#include <utility>
+#include <algorithm>
+#include <stdexcept>
 
-// CR: unique_ptr
-bool Interpreter::registerCreator(const std::string& c, std::shared_ptr<Command> creator) {
-    creators_[c] = std::move(creator);
+bool Interpreter::registerCreator(const std::string& c, Command* creator) {
+    creators_[c].reset(creator);
     return true;
 }
 
-std::string Interpreter::interpret(std::string::iterator& it, std::string::iterator& end) {
-    data_.it = it;
-    data_.end = end;
-    // CR: move this append to main
-    data_.result = '>';
-    while (data_.it != data_.end) {
-        if (*data_.it == ' '){
-            data_.it++;
+std::string Interpreter::interpret(std::string& str) {
+    auto it = str.begin();
+    auto end = str.end();
+    Context a(data_, it, end);
+    while (it != end) {
+        if (std::isspace(*it)){
+            it++;
             continue;
         }
         try {
-            if (isdigit(*data_.it) || (*data_.it == '-' && isdigit(*(data_.it + 1)))) {
-                // CR: add method for number parsing
-                creators_["0"]->apply(data_);
+            if (isdigit(*it) || (*it == '-' && isdigit(*(it + 1)))) {
+                try {
+                    add_number(it, end);
+                }
+                catch (std::out_of_range& e){
+                    a.result << "out_of_range stoi";
+                    break;
+                }
                 continue;
             }
-            std::string str;
-            for (; data_.it < data_.end && !std::isspace(*data_.it); data_.it++) {
-                str += *data_.it;
-            }
 
-            find_command(str)->apply(data_);
-        } catch (interpreter_error & e) {
-            data_.result += "\n";
-            data_.result += e.what();
+            std::string key;
+            for (; it < end && !std::isspace(*it); it++) {
+                key += *it;
+            }
+            find_command(key, a);
+        }
+        catch (interpreter_error & e) {
+            a.result << "\n" << e.what();;
             break;
         }
     }
-    return data_.result;
+    return a.result.str();
 }
 
-std::shared_ptr<Command> Interpreter::find_command( const std::string& str) {
-    auto creators_it = creators_.find(str);
+void Interpreter::find_command(const std::string& key, Context& a) {
+    auto creators_it = creators_.find(key);
     if (creators_it == creators_.end())
-        throw interpreter_error("no such command: '" + str + "'");
+        throw interpreter_error("no such command: '" + key + "'");
 
-    return creators_it->second;
+    creators_it->second->apply(a);
+}
+
+void Interpreter::add_number(std::string::iterator & it, std::string::iterator & end) {
+    int x = 1;
+    if (*it == '-') {
+        x = -1;
+        it++;
+    }
+    std::string::iterator end_word = std::find_if_not(it, end, [](char i){return std::isdigit(i);});
+    if (end_word != end)
+        if (!std::isspace(*end_word))
+            throw interpreter_error("Not number");
+    data_.push_back(std::stoi(std::string(it, end_word)) * x);
+    it = end_word;
+    /*for (; it < end && !std::isspace(*it) && !isdigit(*it); it++) {
+        str += *it;
+        if (!isdigit(*it))
+            throw interpreter_error("Not number: " + str);
+    }
+    data_.push_back(std::stoi(str) * x);*/
 }
