@@ -12,7 +12,7 @@ int main(int argc, char const *argv[]) {
     }
 
     std::string cmds;
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     while (std::getline(file, cmds, '\n')) {
         std::cout << interpreter.interpret(cmds)<< std::endl;
     }

@@ -3,7 +3,7 @@
 
 TEST(interpret, CorrectWorkAddNumber) {
     std::string str = "5 -2 4 . . .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " 4 -2 5";
@@ -12,7 +12,7 @@ TEST(interpret, CorrectWorkAddNumber) {
 
 TEST(interpret, NotCommand) {
     std::string str = "d4 5f 4 . .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nno such command: 'd4'";
@@ -21,7 +21,7 @@ TEST(interpret, NotCommand) {
 
 TEST(interpret, AncorrectWorkAddNumber) {
     std::string str = "5f 4 . .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nNot number";
@@ -30,14 +30,14 @@ TEST(interpret, AncorrectWorkAddNumber) {
 
 TEST(interpret, WorkAddNumber) {
     std::string str = "5";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
     EXPECT_TRUE(result.empty());
 }
 
 TEST(interpret, AncorrectWorkPoint) {
     std::string str = ". .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError point: not enough numbers";
@@ -46,7 +46,7 @@ TEST(interpret, AncorrectWorkPoint) {
 
 TEST(interpret, CorrectWorkAdd) {
     std::string str = "3 4 + .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " 7";
@@ -55,7 +55,7 @@ TEST(interpret, CorrectWorkAdd) {
 
 TEST(interpret, AncorrectWorkAddOneNumber) {
     std::string str = "3 + .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError arithmetic operation: not enough numbers";
@@ -64,7 +64,7 @@ TEST(interpret, AncorrectWorkAddOneNumber) {
 
 TEST(interpret, AncorrectWorkAddZeroNumber) {
     std::string str = "+ .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError arithmetic operation: not enough numbers";
@@ -73,7 +73,7 @@ TEST(interpret, AncorrectWorkAddZeroNumber) {
 
 TEST(interpret, CorrectWorkSub) {
     std::string str = "3 4 - .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " 1";
@@ -82,7 +82,7 @@ TEST(interpret, CorrectWorkSub) {
 
 TEST(interpret, AncorrectWorkSubOneNumber) {
     std::string str = "3 - .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError arithmetic operation: not enough numbers";
@@ -91,7 +91,7 @@ TEST(interpret, AncorrectWorkSubOneNumber) {
 
 TEST(interpret, AncorrectWorkSubZeroNumber) {
     std::string str = "- .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError arithmetic operation: not enough numbers";
@@ -100,7 +100,7 @@ TEST(interpret, AncorrectWorkSubZeroNumber) {
 
 TEST(interpret, CorrectWorkMod) {
     std::string str = "3 4 % .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " 1";
@@ -109,7 +109,7 @@ TEST(interpret, CorrectWorkMod) {
 
 TEST(interpret, AncorrectWorkModOneNumber) {
     std::string str = "3 % .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError arithmetic operation: not enough numbers";
@@ -118,7 +118,7 @@ TEST(interpret, AncorrectWorkModOneNumber) {
 
 TEST(interpret, AncorrectWorkModZeroNumber) {
     std::string str = "% .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError arithmetic operation: not enough numbers";
@@ -127,7 +127,7 @@ TEST(interpret, AncorrectWorkModZeroNumber) {
 
 TEST(interpret, AncorrectWorkModOneNumberZero) {
     std::string str = "3 0 % .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError mod: first number is null";
@@ -136,7 +136,7 @@ TEST(interpret, AncorrectWorkModOneNumberZero) {
 
 TEST(interpret, CorrectWorkDiv) {
     std::string str = "3 4 / .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " 1";
@@ -145,7 +145,7 @@ TEST(interpret, CorrectWorkDiv) {
 
 TEST(interpret, AncorrectWorkDivOneNumber) {
     std::string str = "3 / .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError arithmetic operation: not enough numbers";
@@ -154,7 +154,7 @@ TEST(interpret, AncorrectWorkDivOneNumber) {
 
 TEST(interpret, AncorrectWorkDivZeroNumber) {
     std::string str = "/ .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError arithmetic operation: not enough numbers";
@@ -163,7 +163,7 @@ TEST(interpret, AncorrectWorkDivZeroNumber) {
 
 TEST(interpret, AncorrectWorkDivOneNumberZero) {
     std::string str = "3 0 / .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError div: first number is null";
@@ -172,7 +172,7 @@ TEST(interpret, AncorrectWorkDivOneNumberZero) {
 
 TEST(interpret, CorrectWorkMul) {
     std::string str = "3 4 * .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " 12";
@@ -181,7 +181,7 @@ TEST(interpret, CorrectWorkMul) {
 
 TEST(interpret, AncorrectWorkMulOneNumber) {
     std::string str = "3 * .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError arithmetic operation: not enough numbers";
@@ -190,7 +190,7 @@ TEST(interpret, AncorrectWorkMulOneNumber) {
 
 TEST(interpret, AncorrectWorkMulZeroNumber) {
     std::string str = "* .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError arithmetic operation: not enough numbers";
@@ -199,7 +199,7 @@ TEST(interpret, AncorrectWorkMulZeroNumber) {
 
 TEST(interpret, CorrectWorkMore) {
     std::string str = "2 6 > . 6 2 > .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " 1 0";
@@ -208,7 +208,7 @@ TEST(interpret, CorrectWorkMore) {
 
 TEST(interpret, AncorrectWorkMoreOneNumber) {
     std::string str = ">";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError arithmetic operation: not enough numbers";
@@ -217,7 +217,7 @@ TEST(interpret, AncorrectWorkMoreOneNumber) {
 
 TEST(interpret, AncorrectWorkMoreZeroNumber) {
     std::string str = "1 >";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError arithmetic operation: not enough numbers";
@@ -226,7 +226,7 @@ TEST(interpret, AncorrectWorkMoreZeroNumber) {
 
 TEST(interpret, CorrectWorkLess) {
     std::string str = "2 6 < . 6 2 < .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " 0 1";
@@ -235,7 +235,7 @@ TEST(interpret, CorrectWorkLess) {
 
 TEST(interpret, AncorrectWorkLessOneNumber) {
     std::string str = "<";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError arithmetic operation: not enough numbers";
@@ -244,7 +244,7 @@ TEST(interpret, AncorrectWorkLessOneNumber) {
 
 TEST(interpret, AncorrectWorkLessZeroNumber) {
     std::string str = "1 <";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError arithmetic operation: not enough numbers";
@@ -253,7 +253,7 @@ TEST(interpret, AncorrectWorkLessZeroNumber) {
 
 TEST(interpret, CorrectWorkEquals) {
     std::string str = "2 6 = . 7 7 = .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " 0 1";
@@ -262,7 +262,7 @@ TEST(interpret, CorrectWorkEquals) {
 
 TEST(interpret, AncorrectWorkEqualsOneNumber) {
     std::string str = "=";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError arithmetic operation: not enough numbers";
@@ -271,7 +271,7 @@ TEST(interpret, AncorrectWorkEqualsOneNumber) {
 
 TEST(interpret, AncorrectWorkEqualsZeroNumber) {
     std::string str = "1 =";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError arithmetic operation: not enough numbers";
@@ -280,7 +280,7 @@ TEST(interpret, AncorrectWorkEqualsZeroNumber) {
 
 TEST(interpret, CorrectWorkDup) {
     std::string str = "2 dup . .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " 2 2";
@@ -289,7 +289,7 @@ TEST(interpret, CorrectWorkDup) {
 
 TEST(interpret, AncorrectWorkDup) {
     std::string str = "dup 2 dup . .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError optional operator: not enough numbers";
@@ -298,7 +298,7 @@ TEST(interpret, AncorrectWorkDup) {
 
 TEST(interpret, CorrectWorkDrop) {
     std::string str = "2  4 drop .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " 2";
@@ -307,7 +307,7 @@ TEST(interpret, CorrectWorkDrop) {
 
 TEST(interpret, AncorrectWorkDrop) {
     std::string str = "drop . .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError optional operator: not enough numbers";
@@ -316,7 +316,7 @@ TEST(interpret, AncorrectWorkDrop) {
 
 TEST(interpret, CorrectWorkEmit) {
     std::string str = "65 emit";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " A";
@@ -325,7 +325,7 @@ TEST(interpret, CorrectWorkEmit) {
 
 TEST(interpret, AncorrectWorkEmitNoNumber) {
     std::string str = "emit";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError emit: not enough numbers";
@@ -334,7 +334,7 @@ TEST(interpret, AncorrectWorkEmitNoNumber) {
 
 TEST(interpret, AncorrectWorkEmitNotAscii) {
     std::string str = "-2 emit";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError emit: going out of bounds";
@@ -343,7 +343,7 @@ TEST(interpret, AncorrectWorkEmitNotAscii) {
 
 TEST(interpret, CorrectWorkSwap) {
     std::string str = "2 3 swap . .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " 2 3";
@@ -352,7 +352,7 @@ TEST(interpret, CorrectWorkSwap) {
 
 TEST(interpret, AncorrectWorkSwapNoNumber) {
     std::string str = "3 swap . .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 std::cout<< result;
     std::string expected = "\nError swap: not enough numbers";
@@ -361,7 +361,7 @@ std::cout<< result;
 
 TEST(interpret, CorrectWorkRot) {
     std::string str = "2 3 4 rot . . .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " 3 2 4";
@@ -370,7 +370,7 @@ TEST(interpret, CorrectWorkRot) {
 
 TEST(interpret, AncorrectWorkRotNoNumber) {
     std::string str = "3 4 rot . . .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError rot: not enough numbers";
@@ -379,7 +379,7 @@ TEST(interpret, AncorrectWorkRotNoNumber) {
 
 TEST(interpret, CorrectWorkOver) {
     std::string str = "2 3 over . . .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " 2 3 2";
@@ -388,7 +388,7 @@ TEST(interpret, CorrectWorkOver) {
 
 TEST(interpret, AncorrectWorkOverNoNumbers) {
     std::string str = "over . . .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError over: not enough numbers";
@@ -397,7 +397,7 @@ TEST(interpret, AncorrectWorkOverNoNumbers) {
 
 TEST(interpret, AncorrectWorkOverOneNumber) {
     std::string str = "1 over . . .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError over: not enough numbers";
@@ -406,7 +406,7 @@ TEST(interpret, AncorrectWorkOverOneNumber) {
 
 TEST(interpret, CorrectWorkCr) {
     std::string str = " 23 45 . cr .";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " 45\n 23";
@@ -415,7 +415,7 @@ TEST(interpret, CorrectWorkCr) {
 
 TEST(interpret, CorrectWorkPrintString) {
     std::string str = ".\" wef awd\"";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = " wef awd";
@@ -424,7 +424,7 @@ TEST(interpret, CorrectWorkPrintString) {
 
 TEST(interpret, AncorrectWorkPrintString) {
     std::string str = ".\" wef awd";
-    Interpreter interpreter = Interpreter::getInstance();
+    Interpreter & interpreter = Interpreter::getInstance();
     std::string result = interpreter.interpret(str);
 
     std::string expected = "\nError .\": no \"";

@@ -15,6 +15,7 @@ public:
     bool registerCreator(const std::string& c, std::unique_ptr<Command>&& creator);
     // Translates a string into commands and fulfills them
     std::string interpret(std::string& str);
+    Interpreter(Interpreter & other) = delete;
 private:
     // Find and return command else throw interpreter_error
     void find_command(const std::string& key, Context& a);
