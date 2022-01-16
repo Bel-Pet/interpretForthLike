@@ -17,6 +17,7 @@ std::string Interpreter::interpret(std::string& str) {
             continue;
         }
         try {
+            // Condition for numbers
             if (isdigit(*it) || (*it == '-' && isdigit(*(it + 1)))) {
                 try {
                     add_number(it, end);
@@ -27,7 +28,7 @@ std::string Interpreter::interpret(std::string& str) {
                 }
                 continue;
             }
-
+            // Find key for map
             std::string key;
             for (; it < end && !std::isspace(*it); it++) {
                 key += *it;
@@ -35,7 +36,7 @@ std::string Interpreter::interpret(std::string& str) {
             find_command(key, a);
         }
         catch (interpreter_error & e) {
-            a.result << "\n" << e.what();;
+            a.result << "\n" << e.what();
             break;
         }
     }
@@ -62,10 +63,4 @@ void Interpreter::add_number(std::string::iterator & it, std::string::iterator &
             throw interpreter_error("Not number");
     data_.push_back(std::stoi(std::string(it, end_word)) * x);
     it = end_word;
-    /*for (; it < end && !std::isspace(*it) && !isdigit(*it); it++) {
-        str += *it;
-        if (!isdigit(*it))
-            throw interpreter_error("Not number: " + str);
-    }
-    data_.push_back(std::stoi(str) * x);*/
 }
