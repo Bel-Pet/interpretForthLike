@@ -12,15 +12,16 @@ public:
         return i;
     }
     // Adds a command to the commands map
-    bool registerCreator(const std::string& c, Command* creator_t);
+    bool registerCreator(const std::string& c, std::unique_ptr<Command>&& creator);
     // Translates a string into commands and fulfills them
     std::string interpret(std::string& str);
 private:
-    // Find and return command else return error
+    // Find and return command else throw interpreter_error
     void find_command(const std::string& key, Context& a);
+    // Push number on the data_ else throw interpreter_error
     void add_number(std::string::iterator & it, std::string::iterator & end);
     Interpreter() = default;
-    std::map<std::string, std::shared_ptr<Command>> creators_;
+    std::map<std::string, std::unique_ptr<Command>> creators_;
     std::vector<int> data_;
 };
 

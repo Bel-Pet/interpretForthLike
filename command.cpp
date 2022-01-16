@@ -3,39 +3,39 @@
 
 namespace {
 
-    bool add_cmd = Interpreter::getInstance().registerCreator("+", new Add());
+    bool add_cmd = Interpreter::getInstance().registerCreator("+", std::make_unique<Add>(Add()));
 
-    bool sub_cmd = Interpreter::getInstance().registerCreator("-",  new Sub());
+    bool sub_cmd = Interpreter::getInstance().registerCreator("-",  std::make_unique<Sub>(Sub()));
 
-    bool mod_cmd = Interpreter::getInstance().registerCreator("%", new Mod());
+    bool mod_cmd = Interpreter::getInstance().registerCreator("%", std::make_unique<Mod>(Mod()));
 
-    bool div_cmd = Interpreter::getInstance().registerCreator("/", new Div());
+    bool div_cmd = Interpreter::getInstance().registerCreator("/", std::make_unique<Div>(Div()));
 
-    bool mul_cmd = Interpreter::getInstance().registerCreator("*", new Mul());
+    bool mul_cmd = Interpreter::getInstance().registerCreator("*", std::make_unique<Mul>(Mul()));
 
-    bool more_cmd = Interpreter::getInstance().registerCreator(">", new More());
+    bool more_cmd = Interpreter::getInstance().registerCreator(">", std::make_unique<More>(More()));
 
-    bool less_cmd = Interpreter::getInstance().registerCreator("<", new Less());
+    bool less_cmd = Interpreter::getInstance().registerCreator("<", std::make_unique<Less>(Less()));
 
-    bool equals_cmd = Interpreter::getInstance().registerCreator("=", new Equals());
+    bool equals_cmd = Interpreter::getInstance().registerCreator("=", std::make_unique<Equals>(Equals()));
 
-    bool dup_cmd = Interpreter::getInstance().registerCreator("dup", new Dup());
+    bool dup_cmd = Interpreter::getInstance().registerCreator("dup", std::make_unique<Dup>(Dup()));
 
-    bool drop_cmd = Interpreter::getInstance().registerCreator("drop", new Drop());
+    bool drop_cmd = Interpreter::getInstance().registerCreator("drop", std::make_unique<Drop>(Drop()));
 
-    bool point_cmd = Interpreter::getInstance().registerCreator(".", new Point());
+    bool point_cmd = Interpreter::getInstance().registerCreator(".", std::make_unique<Point>(Point()));
 
-    bool swap_cmd = Interpreter::getInstance().registerCreator("swap", new Swap());
+    bool swap_cmd = Interpreter::getInstance().registerCreator("swap", std::make_unique<Swap>(Swap()));
 
-    bool rot_cmd = Interpreter::getInstance().registerCreator("rot", new Rot());
+    bool rot_cmd = Interpreter::getInstance().registerCreator("rot", std::make_unique<Rot>(Rot()));
 
-    bool over_cmd = Interpreter::getInstance().registerCreator("over", new Over());
+    bool over_cmd = Interpreter::getInstance().registerCreator("over", std::make_unique<Over>(Over()));
 
-    bool emit_cmd = Interpreter::getInstance().registerCreator("emit", new Emit());
+    bool emit_cmd = Interpreter::getInstance().registerCreator("emit", std::make_unique<Emit>(Emit()));
 
-    bool cr_cmd = Interpreter::getInstance().registerCreator("cr", new Cr());
+    bool cr_cmd = Interpreter::getInstance().registerCreator("cr", std::make_unique<Cr>(Cr()));
 
-    bool print_string_cmd = Interpreter::getInstance().registerCreator(".\"", new PrintString());
+    bool print_string_cmd = Interpreter::getInstance().registerCreator(".\"", std::make_unique<PrintString>(PrintString()));
 
    /*Command * if_creator(std::string::iterator & it, std::string::iterator & end) {
         std::vector<Command *> one_stack_command;

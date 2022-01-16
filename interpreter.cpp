@@ -2,8 +2,8 @@
 #include <algorithm>
 #include <stdexcept>
 
-bool Interpreter::registerCreator(const std::string& c, Command* creator) {
-    creators_[c].reset(creator);
+bool Interpreter::registerCreator(const std::string& c, std::unique_ptr<Command>&& creator) {
+    creators_[c] = std::move(creator);
     return true;
 }
 
