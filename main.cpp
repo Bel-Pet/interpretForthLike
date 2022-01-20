@@ -11,6 +11,7 @@ int main(int argc, char const *argv[]) {
         return 0;
     }
 
+    // CR: read from cin, add >
     std::string cmds;
     Interpreter & interpreter = Interpreter::getInstance();
     while (std::getline(file, cmds, '\n')) {

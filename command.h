@@ -7,7 +7,7 @@
 #include <vector>
 #include "interpreter_error.h"
 
-struct  Context {
+struct Context {
     Context(std::vector<int>& data_, std::string::iterator &it, std::string::iterator &end) : stack(data_), it(it), end(end) {}
     std::vector<int>& stack;
     std::string::iterator& it;
@@ -29,6 +29,7 @@ class ArithCommand: public Command {
         int a  = x.stack.back();
         x.stack.pop_back();
         int b = x.stack.back();
+        // CR: add custom stack class
         x.stack.pop_back();
         x.stack.push_back(op(a, b));
     }
@@ -54,6 +55,7 @@ class Mul: public ArithCommand {
     }
 };
 
+// CR: inherit ArithCommand, override apply and then invoke its apply
 class Mod: public Command {
     void apply(Context& x) override {
         if (x.stack.size() < 2)
@@ -69,6 +71,7 @@ class Mod: public Command {
     }
 };
 
+// CR: same
 class Div: public Command {
     void apply(Context& x) override {
         if (x.stack.size() < 2)

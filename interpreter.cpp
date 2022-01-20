@@ -22,6 +22,7 @@ std::string Interpreter::interpret(std::string& str) {
                 try {
                     add_number(it, end);
                 }
+                // CR: move closer to other catch
                 catch (std::out_of_range& e){
                     a.result << "out_of_range stoi";
                     break;
@@ -52,13 +53,15 @@ void Interpreter::find_command(const std::string& key, Context& a) {
 }
 
 void Interpreter::add_number(std::string::iterator & it, std::string::iterator & end) {
+    // CR: include negation to stoi input
     int x = 1;
     if (*it == '-') {
         x = -1;
         it++;
     }
-    std::string::iterator end_word = std::find_if_not(it, end, [](char i){return std::isdigit(i);});
+    std::string::iterator end_word = std::find_if_not(it, end, ::isdigit);
     if (end_word != end)
+        // CR: return back to find_command
         if (!std::isspace(*end_word))
             throw interpreter_error("Not number");
     data_.push_back(std::stoi(std::string(it, end_word)) * x);
