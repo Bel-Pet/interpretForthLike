@@ -17,18 +17,8 @@ std::string Interpreter::interpret(std::string& str) {
             continue;
         }
         try {
-            // Condition for numbers
-            if (isdigit(*it) || (*it == '-' && isdigit(*(it + 1)))) {
-                try {
-                    add_number(it, end);
-                }
-                // CR: move closer to other catch
-                catch (std::out_of_range& e){
-                    a.result << "out_of_range stoi";
-                    break;
-                }
+            if (add_number(it, end))
                 continue;
-            }
             // Find key for map
             std::string key;
             for (; it < end && !std::isspace(*it); it++) {
@@ -38,6 +28,10 @@ std::string Interpreter::interpret(std::string& str) {
         }
         catch (interpreter_error & e) {
             a.result << "\n" << e.what();
+            break;
+        }
+        catch (std::out_of_range& e){
+            a.result << "\n" << "out_of_range stoi";
             break;
         }
     }
@@ -52,18 +46,24 @@ void Interpreter::find_command(const std::string& key, Context& a) {
     creators_it->second->apply(a);
 }
 
-void Interpreter::add_number(std::string::iterator & it, std::string::iterator & end) {
-    // CR: include negation to stoi input
-    int x = 1;
-    if (*it == '-') {
-        x = -1;
-        it++;
+bool Interpreter::add_number(std::string::iterator & it, std::string::iterator & end) {
+    if (*it == '-' && std::isdigit(*(it + 1))) {
+        std::string::iterator end_word = std::find_if_not(it + 1, end, ::isdigit);
+        if (end_word != end)
+            if (!std::isspace(*end_word))
+                return false;
+        data_.push(std::stoi(std::string(it, end_word)));
+        it = end_word;
+        return true;
     }
-    std::string::iterator end_word = std::find_if_not(it, end, ::isdigit);
-    if (end_word != end)
-        // CR: return back to find_command
-        if (!std::isspace(*end_word))
-            throw interpreter_error("Not number");
-    data_.push_back(std::stoi(std::string(it, end_word)) * x);
-    it = end_word;
+    if (std::isdigit(*it)){
+        std::string::iterator end_word = std::find_if_not(it, end, ::isdigit);
+        if (end_word != end)
+            if (!std::isspace(*end_word))
+                return false;
+        data_.push(std::stoi(std::string(it, end_word)));
+        it = end_word;
+        return true;
+    }
+    return false;
 }

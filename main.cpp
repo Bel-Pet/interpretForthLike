@@ -1,22 +1,15 @@
 #include <string>
 #include <iostream>
-#include <fstream>
 #include "interpreter.h"
 
 int main(int argc, char const *argv[]) {
-    std::ifstream file("C:\\Users\\bel_p\\CLionProjects\\interpretForthLike\\file.txt");
 
-    if (!file) {
-        std::cout << "Error file";
-        return 0;
-    }
-
-    // CR: read from cin, add >
     std::string cmds;
     Interpreter & interpreter = Interpreter::getInstance();
-    while (std::getline(file, cmds, '\n')) {
-        std::cout << interpreter.interpret(cmds)<< std::endl;
+    while (true) {
+        std::cout << "> ";
+        std::getline(std::cin , cmds);
+        std::cout << '>' << interpreter.interpret(cmds)<< std::endl;
     }
-    file.close();
     return 0;
 }

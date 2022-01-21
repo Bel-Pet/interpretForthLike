@@ -17,13 +17,15 @@ public:
     std::string interpret(std::string& str);
     Interpreter(Interpreter & other) = delete;
 private:
-    // Find and return command else throw interpreter_error
+    // Find and return command
+    // Else throw interpreter_error
     void find_command(const std::string& key, Context& a);
-    // Push number on the data_ else throw interpreter_error
-    void add_number(std::string::iterator & it, std::string::iterator & end);
+    // Push number on the data_
+    // Else throw interpreter_error
+    bool add_number(std::string::iterator & it, std::string::iterator & end);
     Interpreter() = default;
     std::map<std::string, std::unique_ptr<Command>> creators_;
-    std::vector<int> data_;
+    Stack data_;
 };
 
 #endif
