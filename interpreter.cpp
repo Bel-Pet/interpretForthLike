@@ -31,7 +31,7 @@ std::string Interpreter::interpret(std::string& str) {
             break;
         }
         catch (std::out_of_range& e){
-            a.result << "\n" << "out_of_range stoi";
+            a.result << "\n" << e.what();
             break;
         }
     }
@@ -47,23 +47,13 @@ void Interpreter::find_command(const std::string& key, Context& a) {
 }
 
 bool Interpreter::add_number(std::string::iterator & it, std::string::iterator & end) {
-    if (*it == '-' && std::isdigit(*(it + 1))) {
-        std::string::iterator end_word = std::find_if_not(it + 1, end, ::isdigit);
-        if (end_word != end)
-            if (!std::isspace(*end_word))
-                return false;
-        data_.push(std::stoi(std::string(it, end_word)));
-        it = end_word;
-        return true;
-    }
-    if (std::isdigit(*it)){
-        std::string::iterator end_word = std::find_if_not(it, end, ::isdigit);
-        if (end_word != end)
-            if (!std::isspace(*end_word))
-                return false;
-        data_.push(std::stoi(std::string(it, end_word)));
-        it = end_word;
-        return true;
-    }
-    return false;
+    std::string::iterator digits_it = it;
+    if (*digits_it == '-') digits_it++;
+    if (digits_it == end || !std::isdigit(*digits_it)) return false;
+    std::string::iterator end_digits = std::find_if_not(digits_it, end, ::isdigit);
+    if (end_digits != end && !std::isspace(*end_digits))
+        return false;
+    data_.push(std::stoi(std::string(it, end_digits)));
+    it = end_digits;
+    return true;
 }

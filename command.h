@@ -8,13 +8,13 @@
 #include <vector>
 #include "interpreter_error.h"
 
-class Stack {
+class IntStack {
 private:
     std::vector<int> data;
 public:
-    Stack() = default;
+    IntStack() = default;
 
-    ~Stack() = default;
+    ~IntStack() = default;
 
     void push(int a){
         data.push_back(a);
@@ -24,10 +24,11 @@ public:
         data.pop_back();
         return a;
     }
+    // CR: return number instead of iterator
     std::vector<int>::iterator end(){
         return data.end();
     }
-    int back(){
+    int peek(){
         return data.back();
     }
     size_t size(){
@@ -38,9 +39,9 @@ public:
     }
 };
 
-struct  Context {
-    Context(Stack& data_, std::string::iterator &it, std::string::iterator &end) : stack(data_), it(it), end(end) {}
-    Stack& stack;
+struct Context {
+    Context(IntStack& data_, std::string::iterator &it, std::string::iterator &end) : stack(data_), it(it), end(end) {}
+    IntStack& stack;
     std::string::iterator& it;
     const std::string::iterator& end;
     std::stringstream result;
@@ -54,7 +55,7 @@ public:
 
 class ArithCommand: public Command {
 public:
-    virtual void apply(Context& x) {
+    void apply(Context& x) override {
         if (x.stack.size() < 2)
             throw interpreter_error("Error arithmetic operation: not enough numbers");
 
@@ -88,7 +89,7 @@ class Mul: public ArithCommand {
 class Mod: public ArithCommand {
 public:
     void apply(Context& x)  override {
-        if (!x.stack.empty() && x.stack.back() == 0)
+        if (!x.stack.empty() && x.stack.peek() == 0)
             throw interpreter_error("Error mod: first number is null");
         ArithCommand::apply(x);
     }
@@ -99,7 +100,7 @@ public:
 
 class Div: public ArithCommand {
     void apply(Context& x)  override {
-        if (!x.stack.empty() && x.stack.back() == 0)
+        if (!x.stack.empty() && x.stack.peek() == 0)
             throw interpreter_error("Error div: first number is null");
         ArithCommand::apply(x);
     }
@@ -131,7 +132,7 @@ class Dup: public Command {
         if (x.stack.empty())
             throw interpreter_error("Error optional operator: not enough numbers");
 
-        x.stack.push(x.stack.back());
+        x.stack.push(x.stack.peek());
     }
 };
 
@@ -188,8 +189,7 @@ public:
         if (x.stack.empty())
             throw interpreter_error("Error point: not enough numbers");
 
-        x.result << " " << x.stack.back();
-        x.stack.pop();
+        x.result << " " << x.stack.pop();
     }
 };
 
@@ -201,7 +201,7 @@ public:
 
         int a = x.stack.pop();
         if (a < 0 || a > 255)
-            throw interpreter_error("Error emit: going out of bounds");
+            throw interpreter_error("Error emit: number on stack is out of ASCII range");
 
         x.result << " " << (char)a;
     }

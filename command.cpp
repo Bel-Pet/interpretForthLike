@@ -35,6 +35,6 @@ namespace {
 
     bool cr_cmd = Interpreter::getInstance().registerCreator("cr", std::make_unique<Cr>());
 
-    bool print_string_cmd = Interpreter::getInstance().registerCreator(".\"", std::make_unique<PrintString>(PrintString()));
+    bool print_string_cmd = Interpreter::getInstance().registerCreator(".\"", std::make_unique<PrintString>());
 
 }

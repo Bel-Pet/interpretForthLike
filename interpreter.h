@@ -13,7 +13,7 @@ public:
     }
     // Adds a command to the commands map
     bool registerCreator(const std::string& c, std::unique_ptr<Command>&& creator);
-    // Translates a string into commands and fulfills them
+    // Translates a string into commands and executes them
     std::string interpret(std::string& str);
     Interpreter(Interpreter & other) = delete;
 private:
@@ -25,7 +25,7 @@ private:
     bool add_number(std::string::iterator & it, std::string::iterator & end);
     Interpreter() = default;
     std::map<std::string, std::unique_ptr<Command>> creators_;
-    Stack data_;
+    IntStack data_;
 };
 
 #endif
