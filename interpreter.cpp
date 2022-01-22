@@ -1,6 +1,6 @@
-#include "interpreter.h"
 #include <algorithm>
 #include <stdexcept>
+#include "interpreter.h"
 
 bool Interpreter::registerCreator(const std::string& c, std::unique_ptr<Command>&& creator) {
     creators_[c] = std::move(creator);
@@ -31,7 +31,7 @@ std::string Interpreter::interpret(std::string& str) {
             break;
         }
         catch (std::out_of_range& e){
-            a.result << "\n" << e.what();
+            a.result << "\n" << "out_of_range stoi";
             break;
         }
     }
