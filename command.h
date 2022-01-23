@@ -7,13 +7,14 @@
 class Command {
 public:
     virtual ~Command()= default;
+    // CR: add comment
     virtual void apply(Context& x) = 0;
 };
 
 class ArithCommand: public Command {
 public:
     // Performs an operation on the two elements at the top of the stack
-    // Throw interpreter_error if there are less than two numbers on stack throw interpreter_error
+    // Throw interpreter_error if there are less than two numbers on stack
     void apply(Context& x) override {
         if (x.stack.size() < 2)
             throw interpreter_error("Error arithmetic operation: not enough numbers");
@@ -124,7 +125,7 @@ public:
 
 class Rot: public Command {
 public:
-    // Rot three top numbers on the stack
+    // Rotate three top numbers on the stack
     // Example: 1 2 3 -> 3 1 2
     // Throw interpreter_error if there are not enough numbers
     void apply(Context& x)  override {

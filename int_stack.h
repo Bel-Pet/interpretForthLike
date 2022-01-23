@@ -6,8 +6,6 @@
 #include <sstream>
 
 class IntStack {
-private:
-    std::vector<int> data;
 public:
     IntStack() = default;
 
@@ -22,7 +20,8 @@ public:
         return a;
     }
     // Return point to stack element number a
-    int at(int a){
+    // CR: return n-th element from the beginning of the stack, move `data.end() - n` to call site
+    int at(int a) {
         int b = *(data.end() - a);
         return b;
     }
@@ -44,9 +43,12 @@ public:
         std::swap(*(data.end() - a), *(data.end() - b));
         return true;
     }
+private:
+    std::vector<int> data;
 };
 
-struct  Context {
+// CR: move to separate file
+struct Context {
     Context(IntStack& data_, std::string::iterator &it, std::string::iterator &end) : stack(data_), it(it), end(end) {}
     IntStack& stack;
     std::string::iterator& it;

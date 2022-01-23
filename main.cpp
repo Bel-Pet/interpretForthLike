@@ -9,7 +9,7 @@ int main(int argc, char const *argv[]) {
     while (true) {
         std::cout << "> ";
         std::getline(std::cin , cmds);
-        std::cout << '>' << interpreter.interpret(cmds)<< std::endl;
+        std::cout << '>' << interpreter.interpret(cmds) << std::endl;
     }
     return 0;
 }
