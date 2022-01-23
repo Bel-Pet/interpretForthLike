@@ -15,7 +15,7 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(interpretForthLike #[[interpreter.h]] interpreter.cpp #[[command.h]] command.cpp #[[interpreter_error.h]] test.cpp int_stack.h)
+add_executable(interpretForthLike #[[interpreter.h]] interpreter.cpp #[[command.h]] command.cpp #[[interpreter_error.h]] test.cpp int_stack.h context.h)
 
 target_link_libraries(
         interpretForthLike

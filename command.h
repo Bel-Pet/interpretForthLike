@@ -1,19 +1,19 @@
 #ifndef INTERPRETFORTHLIKE_COMMAND_H
 #define INTERPRETFORTHLIKE_COMMAND_H
 
-#include "int_stack.h"
+#include "context.h"
 #include "interpreter_error.h"
 
 class Command {
 public:
     virtual ~Command()= default;
-    // CR: add comment
+    // Executes a command
     virtual void apply(Context& x) = 0;
 };
 
 class ArithCommand: public Command {
 public:
-    // Performs an operation on the two elements at the top of the stack
+    // Call function op
     // Throw interpreter_error if there are less than two numbers on stack
     void apply(Context& x) override {
         if (x.stack.size() < 2)
@@ -125,7 +125,7 @@ public:
 
 class Rot: public Command {
 public:
-    // Rotate three top numbers on the stack
+    // Rot three top numbers on the stack
     // Example: 1 2 3 -> 3 1 2
     // Throw interpreter_error if there are not enough numbers
     void apply(Context& x)  override {
@@ -188,7 +188,8 @@ public:
 
 class PrintString: public Command {
 public:
-    // Print string in brackets
+    // Print string in brackets ""
+    // Need a space after the firs "
     // Throw interpreter_error if there is no closing bracket
     // Symbol " cannot be printed
     void apply(Context& x)  override {

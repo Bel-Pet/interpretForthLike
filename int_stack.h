@@ -3,9 +3,10 @@
 
 #include <vector>
 #include <iostream>
-#include <sstream>
 
 class IntStack {
+private:
+    std::vector<int> data;
 public:
     IntStack() = default;
 
@@ -19,11 +20,9 @@ public:
         data.pop_back();
         return a;
     }
-    // Return point to stack element number a
-    // CR: return n-th element from the beginning of the stack, move `data.end() - n` to call site
-    int at(int a) {
-        int b = *(data.end() - a);
-        return b;
+    // Return copy to stack element number a
+    int at(int a){
+        return *(data.end() - a);
     }
 
     int peek(){
@@ -43,17 +42,6 @@ public:
         std::swap(*(data.end() - a), *(data.end() - b));
         return true;
     }
-private:
-    std::vector<int> data;
-};
-
-// CR: move to separate file
-struct Context {
-    Context(IntStack& data_, std::string::iterator &it, std::string::iterator &end) : stack(data_), it(it), end(end) {}
-    IntStack& stack;
-    std::string::iterator& it;
-    const std::string::iterator& end;
-    std::stringstream result;
 };
 
 #endif //INTERPRETFORTHLIKE_INT_STACK_H
