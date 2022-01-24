@@ -17,11 +17,11 @@ public:
     std::string interpret(std::string& str);
     Interpreter(Interpreter & other) = delete;
 private:
-    // Find and completed command
+    // Find and execute command
     // Throw interpreter_error if command does not exist
     void find_command(const std::string& key, Context& a);
     // Find a number
-    // If number is found  true and push number on stack else false
+    // If number is found return true and push number on stack else return false
     bool add_number(std::string::iterator & it, std::string::iterator & end);
     Interpreter() = default;
     std::map<std::string, std::unique_ptr<Command>> creators_;

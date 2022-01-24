@@ -125,7 +125,7 @@ public:
 
 class Rot: public Command {
 public:
-    // Rot three top numbers on the stack
+    // Rotate three top numbers on the stack
     // Example: 1 2 3 -> 3 1 2
     // Throw interpreter_error if there are not enough numbers
     void apply(Context& x)  override {
@@ -145,7 +145,7 @@ public:
         if (x.stack.size() < 2)
             throw interpreter_error("Error over: not enough numbers");
 
-        x.stack.push(x.stack.at(2));
+        x.stack.push(x.stack.at(x.stack.size() - 1));
     }
 };
 

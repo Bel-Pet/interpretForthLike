@@ -5,8 +5,6 @@
 #include <iostream>
 
 class IntStack {
-private:
-    std::vector<int> data;
 public:
     IntStack() = default;
 
@@ -22,7 +20,7 @@ public:
     }
     // Return copy to stack element number a
     int at(int a){
-        return *(data.end() - a);
+        return *(data.begin() + a - 1);
     }
 
     int peek(){
@@ -42,6 +40,8 @@ public:
         std::swap(*(data.end() - a), *(data.end() - b));
         return true;
     }
+private:
+    std::vector<int> data;
 };
 
 #endif //INTERPRETFORTHLIKE_INT_STACK_H
