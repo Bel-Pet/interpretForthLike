@@ -27,7 +27,7 @@ public:
         x.stack.push(op()(a, b));
     }
 
-    // Return result of an operation with two arguments
+    // Return result of an arithmetic operation with two arguments
     virtual std::function<int(int, int)> op() = 0;
 };
 
