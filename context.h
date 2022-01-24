@@ -6,10 +6,14 @@
 
 struct Context {
     Context(IntStack& data_, std::string::const_iterator &it, const std::string::const_iterator &end) : stack(data_), it(it), end(end) {}
+    // Value stack
     IntStack& stack;
+    // Begin iterator of the command
     std::string::const_iterator& it;
+    // End iterator of the command
     const std::string::const_iterator& end;
+    // Result command execution
     std::stringstream result;
 };
 
-#endif //INTERPRETFORTHLIKE_CONTEXT_H
+#endif

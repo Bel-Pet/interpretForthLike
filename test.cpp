@@ -31,9 +31,6 @@ TEST(ArithCommand, Correct_Work_Add) {
     std::string str = "3 4 + .";
     std::string result = Interpreter::getInstance().interpret(str);
     EXPECT_EQ(result, " 7");
-    // CR: not used
-    str = ".";
-    result = Interpreter::getInstance().interpret(str);
 }
 
 TEST(ArithCommand, Incorrect_Work_Add_One_Number) {
@@ -162,21 +159,21 @@ TEST(ArithCommand, Incorrect_Work_Mul_One_Number) {
     EXPECT_EQ(result, " 1");
 }
 
-// More command
+// Great command
 
-TEST(ArithCommand, Correct_Work_More) {
+TEST(ArithCommand, Correct_Work_Great) {
     std::string str = "2 6 > . 6 2 > .";
     std::string result = Interpreter::getInstance().interpret(str);
     EXPECT_EQ(result, " 1 0");
 }
 
-TEST(ArithCommand, Incorrect_Work_More_Zero_Number) {
+TEST(ArithCommand, Incorrect_Work_Great_Zero_Number) {
     std::string str = ">";
     std::string result = Interpreter::getInstance().interpret(str);
     EXPECT_EQ(result, "\nError arithmetic operation: not enough numbers");
 }
 
-TEST(ArithCommand, Incorrect_Work_More_One_Number) {
+TEST(ArithCommand, Incorrect_Work_Great_One_Number) {
     std::string str = "1 > .";
     std::string result = Interpreter::getInstance().interpret(str);
     EXPECT_EQ(result, "\nError arithmetic operation: not enough numbers");
@@ -376,23 +373,12 @@ TEST(Other_Command, Incorrect_Work_PrintString_Two_Closing_Brackets) {
 // Underflow operator - and overflow operator +
 
 TEST(Underflow_And_Overflow, Correct_Work_Underflow) {
-    // CR: rewrite as Correct_Work_Overflow
-    std::stringstream s1;
-    s1 << std::numeric_limits<int>::min();
-
-    std::stringstream s2;
-    s2 << " " << std::numeric_limits<int>::max();
-
-    std::string str = "1";
-    std::string result = Interpreter::getInstance().interpret(str);
-
-    str = s1.str();
-    result = Interpreter::getInstance().interpret(str);
-
-    str = "- .";
-    result = Interpreter::getInstance().interpret(str);
-
-    EXPECT_EQ(result, s2.str());
+    std::stringstream ss;
+    ss << " " << 1 << " " << std::numeric_limits<int>::min() << " - .";
+    auto actual = Interpreter::getInstance().interpret(ss.str());
+    std::stringstream expected;
+    expected << " " << std::numeric_limits<int>::max();
+    EXPECT_EQ(actual, expected.str());
 }
 
 TEST(Underflow_And_Overflow, Correct_Work_Overflow) {

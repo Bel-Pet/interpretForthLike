@@ -1,6 +1,7 @@
 #ifndef INTERPRETFORTHLIKE_COMMAND_H
 #define INTERPRETFORTHLIKE_COMMAND_H
 
+#include <functional>
 #include "context.h"
 #include "interpreter_error.h"
 
@@ -8,7 +9,7 @@ class Command {
 public:
     virtual ~Command()= default;
     // Executes a command
-    // CR: what is context, how to use it? specify in doc
+    // Context contains stack, command string iterator and line where the result is written
     virtual void apply(Context& x) = 0;
 };
 
@@ -23,29 +24,28 @@ public:
         int a  = x.stack.pop();
 
         int b = x.stack.pop();
-        x.stack.push(op(a, b));
+        x.stack.push(op()(a, b));
     }
 
-    // CR: what is a and b?
-    // CR: use (int, int) instead of references
-    virtual int op(int& a, int& b)  = 0;
+    // Return result of an operation with two arguments
+    virtual std::function<int(int, int)> op() = 0;
 };
 
 class Add: public ArithCommand {
-    int op(int& a, int& b) override {
-        return a + b;
+    std::function<int(int, int)> op() override {
+        return std::plus();
     }
 };
 
 class Sub: public ArithCommand {
-    int op(int& a, int& b)  override {
-        return a - b;
+    std::function<int(int, int)> op() override {
+        return std::minus();
     }
 };
 
 class Mul: public ArithCommand {
-    int op(int& a, int& b)  override {
-        return a * b;
+    std::function<int(int, int)> op() override {
+        return std::multiplies();
     }
 };
 
@@ -57,8 +57,8 @@ public:
             throw interpreter_error("Error mod: first number is null");
         ArithCommand::apply(x);
     }
-    int op(int& a, int& b)  override {
-        return a % b;
+    std::function<int(int, int)> op() override {
+        return std::modulus();
     }
 };
 
@@ -69,26 +69,26 @@ class Div: public ArithCommand {
             throw interpreter_error("Error div: first number is null");
         ArithCommand::apply(x);
     }
-    int op(int& a, int& b)  override {
-        return a / b;
+    std::function<int(int, int)> op() override {
+        return std::divides();
     }
 };
 
-class More: public ArithCommand {
-    int op(int& a, int& b)  override {
-        return a > b;
+class Great: public ArithCommand {
+    std::function<int(int, int)> op() override {
+        return std::greater();
     }
 };
 
 class Less: public ArithCommand {
-    int op(int& a, int& b)  override {
-        return a < b;
+    std::function<int(int, int)> op() override {
+        return std::less();
     }
 };
 
 class Equals: public ArithCommand {
-    int op(int& a, int& b)  override {
-        return a == b;
+    std::function<int(int, int)> op() override {
+        return std::equal_to();
     }
 };
 
@@ -148,7 +148,7 @@ public:
         if (x.stack.size() < 2)
             throw interpreter_error("Error over: not enough numbers");
 
-        x.stack.push(x.stack.at(x.stack.size() - 1));
+        x.stack.push(x.stack.at((int)x.stack.size() - 2));
     }
 };
 

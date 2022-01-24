@@ -13,7 +13,7 @@ namespace {
 
     bool mul_cmd = Interpreter::getInstance().registerCreator("*", std::make_unique<Mul>());
 
-    bool more_cmd = Interpreter::getInstance().registerCreator(">", std::make_unique<More>());
+    bool more_cmd = Interpreter::getInstance().registerCreator(">", std::make_unique<Great>());
 
     bool less_cmd = Interpreter::getInstance().registerCreator("<", std::make_unique<Less>());
 

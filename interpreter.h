@@ -14,7 +14,7 @@ public:
     // Adds a command to the commands map
     bool registerCreator(const std::string& c, std::unique_ptr<Command>&& creator);
     // Return result of commands execution
-    // CR: what will happen if one of the commands failed? Specify in doc
+    // Break and write error to result if one of the commands failed
     std::string interpret(const std::string& str);
     Interpreter(Interpreter & other) = delete;
 private:
