@@ -4,11 +4,11 @@
 #include <sstream>
 #include "int_stack.h"
 
-struct  Context {
-    Context(IntStack& data_, std::string::iterator &it, std::string::iterator &end) : stack(data_), it(it), end(end) {}
+struct Context {
+    Context(IntStack& data_, std::string::const_iterator &it, const std::string::const_iterator &end) : stack(data_), it(it), end(end) {}
     IntStack& stack;
-    std::string::iterator& it;
-    const std::string::iterator& end;
+    std::string::const_iterator& it;
+    const std::string::const_iterator& end;
     std::stringstream result;
 };
 

@@ -7,10 +7,10 @@ bool Interpreter::registerCreator(const std::string& c, std::unique_ptr<Command>
     return true;
 }
 
-std::string Interpreter::interpret(std::string& str) {
+std::string Interpreter::interpret(const std::string& str) {
     auto it = str.begin();
     auto end = str.end();
-    Context a(data_, it, end);
+    Context context(data_, it, end);
     while (it != end) {
         if (std::isspace(*it)){
             it++;
@@ -24,33 +24,33 @@ std::string Interpreter::interpret(std::string& str) {
             for (; it < end && !std::isspace(*it); it++) {
                 key += *it;
             }
-            find_command(key, a);
+            find_command(key, context);
         }
         catch (interpreter_error & e) {
-            a.result << "\n" << e.what();
+            context.result << "\n" << e.what();
             break;
         }
         catch (std::out_of_range& e){
-            a.result << "\n" << "out_of_range stoi";
+            context.result << "\n" << "out_of_range stoi";
             break;
         }
     }
-    return a.result.str();
+    return context.result.str();
 }
 
-void Interpreter::find_command(const std::string& key, Context& a) {
+void Interpreter::find_command(const std::string& key, Context& context) {
     auto creators_it = creators_.find(key);
     if (creators_it == creators_.end())
         throw interpreter_error("no such command: '" + key + "'");
 
-    creators_it->second->apply(a);
+    creators_it->second->apply(context);
 }
 
-bool Interpreter::add_number(std::string::iterator & it, std::string::iterator & end) {
-    std::string::iterator digits_it = it;
+bool Interpreter::add_number(std::string::const_iterator & it, std::string::const_iterator & end) {
+    std::string::const_iterator digits_it = it;
     if (*digits_it == '-') digits_it++;
     if (digits_it == end || !std::isdigit(*digits_it)) return false;
-    std::string::iterator end_digits = std::find_if_not(digits_it, end, ::isdigit);
+    std::string::const_iterator end_digits = std::find_if_not(digits_it, end, ::isdigit);
     if (end_digits != end && !std::isspace(*end_digits))
         return false;
     data_.push(std::stoi(std::string(it, end_digits)));

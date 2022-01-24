@@ -3,8 +3,7 @@
 #include "interpreter.h"
 
 TEST(Numbers_And_Command_Point, Correct_Work_Push_To_Stack) {
-    std::string str = "5 -2 4 . . .";
-    std::string result = Interpreter::getInstance().interpret(str);
+    std::string result = Interpreter::getInstance().interpret("5 -2 4 . . .");
     EXPECT_EQ(result, " 4 -2 5");
 }
 
@@ -32,6 +31,7 @@ TEST(ArithCommand, Correct_Work_Add) {
     std::string str = "3 4 + .";
     std::string result = Interpreter::getInstance().interpret(str);
     EXPECT_EQ(result, " 7");
+    // CR: not used
     str = ".";
     result = Interpreter::getInstance().interpret(str);
 }
@@ -83,6 +83,7 @@ TEST(ArithCommand, Correct_Work_Mod) {
 }
 
 TEST(ArithCommand, Incorrect_Work_Mod_No_Numbers) {
+    // CR: inline everywhere
     std::string str = "% .";
     std::string result = Interpreter::getInstance().interpret(str);
     EXPECT_EQ(result, "\nError arithmetic operation: not enough numbers");
@@ -367,14 +368,15 @@ TEST(Other_Command, Incorrect_Work_PrintString_No_Closing_Bracket) {
 }
 
 TEST(Other_Command, Incorrect_Work_PrintString_Two_Closing_Brackets) {
-    std::string str = ".\" wef awd\"\"";
+    std::string str = R"(." wef awd"")";
     std::string result = Interpreter::getInstance().interpret(str);
     EXPECT_EQ(result, " wef awd\nno such command: '\"'");
 }
 
 // Underflow operator - and overflow operator +
 
-TEST(Underflow_And_Overflow, Incorrect_Work_Underflow) {
+TEST(Underflow_And_Overflow, Correct_Work_Underflow) {
+    // CR: rewrite as Correct_Work_Overflow
     std::stringstream s1;
     s1 << std::numeric_limits<int>::min();
 
@@ -393,21 +395,11 @@ TEST(Underflow_And_Overflow, Incorrect_Work_Underflow) {
     EXPECT_EQ(result, s2.str());
 }
 
-TEST(Underflow_And_Overflow, Incorrect_Work_Overflow) {
-    std::stringstream s1;
-    s1 << " " << std::numeric_limits<int>::min();
-
-    std::stringstream s2;
-    s2 << std::numeric_limits<int>::max();
-
-    std::string str = "1";
-    std::string result = Interpreter::getInstance().interpret(str);
-
-    str = s2.str();
-    result = Interpreter::getInstance().interpret(str);
-
-    str = "+ .";
-    result = Interpreter::getInstance().interpret(str);
-
-    EXPECT_EQ(result, s1.str());
+TEST(Underflow_And_Overflow, Correct_Work_Overflow) {
+    std::stringstream ss;
+    ss << " " << 1 << " " << std::numeric_limits<int>::max() << " + .";
+    auto actual = Interpreter::getInstance().interpret(ss.str());
+    std::stringstream expected;
+    expected << " " << std::numeric_limits<int>::min();
+    EXPECT_EQ(actual, expected.str());
 }

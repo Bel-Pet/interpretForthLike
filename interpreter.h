@@ -13,16 +13,17 @@ public:
     }
     // Adds a command to the commands map
     bool registerCreator(const std::string& c, std::unique_ptr<Command>&& creator);
-    // Return result of commands from str
-    std::string interpret(std::string& str);
+    // Return result of commands execution
+    // CR: what will happen if one of the commands failed? Specify in doc
+    std::string interpret(const std::string& str);
     Interpreter(Interpreter & other) = delete;
 private:
     // Find and execute command
     // Throw interpreter_error if command does not exist
-    void find_command(const std::string& key, Context& a);
+    void find_command(const std::string& key, Context& context);
     // Find a number
     // If number is found return true and push number on stack else return false
-    bool add_number(std::string::iterator & it, std::string::iterator & end);
+    bool add_number(std::string::const_iterator & it, std::string::const_iterator & end);
     Interpreter() = default;
     std::map<std::string, std::unique_ptr<Command>> creators_;
     IntStack data_;

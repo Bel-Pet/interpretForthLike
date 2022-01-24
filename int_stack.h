@@ -18,9 +18,9 @@ public:
         data.pop_back();
         return a;
     }
-    // Return copy to stack element number a
-    int at(int a){
-        return *(data.begin() + a - 1);
+    // Return copy to stack element number n
+    int at(int n){
+        return data.at(n);
     }
 
     int peek(){

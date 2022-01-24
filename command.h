@@ -8,6 +8,7 @@ class Command {
 public:
     virtual ~Command()= default;
     // Executes a command
+    // CR: what is context, how to use it? specify in doc
     virtual void apply(Context& x) = 0;
 };
 
@@ -25,6 +26,8 @@ public:
         x.stack.push(op(a, b));
     }
 
+    // CR: what is a and b?
+    // CR: use (int, int) instead of references
     virtual int op(int& a, int& b)  = 0;
 };
 
@@ -188,10 +191,10 @@ public:
 
 class PrintString: public Command {
 public:
-    // Print string in brackets ""
-    // Need a space after the firs "
-    // Throw interpreter_error if there is no closing bracket
-    // Symbol " cannot be printed
+    // Print string in quotes.
+    // String format: ." STRING_CONTENT" (space after opening quote is required).
+    // Only STRING_CONTENT will be printed. Note that STRING_CONTENT cannot include quotes.
+    // Throw interpreter_error if there is no closing quote.
     void apply(Context& x)  override {
         std::string str;
         for (; x.it < x.end && *x.it != '"'; x.it++) {
